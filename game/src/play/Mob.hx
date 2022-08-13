@@ -10,6 +10,9 @@ abstract class Mob {
 	private var x:Float = 0;
 	private var y:Float = 0;
 
+	@:native("g")
+	private var gravity:Float = GRAVITY;
+
 	@:native("xs")
 	private var xSpeed:Float = 0;
 	@:native("ys")
