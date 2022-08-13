@@ -3,9 +3,10 @@ package;
 import js.Browser;
 import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
-import js.html.FocusEvent;
 
 class Main {
+	private static inline var MAX_DELTA = 1000 / 12;
+
 	@:native("e")
 	private static var canvas:CanvasElement;
 
@@ -14,9 +15,6 @@ class Main {
 
 	@:native("l")
 	public static var lastFrame:Float = 0;
-
-	@:native("f")
-	public static var focusReset:Bool = false;
 
 	private static var playing:Bool = false;
 
@@ -28,10 +26,6 @@ class Main {
 
 		Browser.window.document.body.onresize = onResize;
 		onResize();
-
-		Browser.window.onfocus = function(e:FocusEvent) {
-			focusReset = true;
-		};
 
 		Ctrl.init(Browser.window, canvas);
 
@@ -48,13 +42,10 @@ class Main {
 	}
 
 	private static function update(s:Float) {
-		if (focusReset) {
-			lastFrame = s - 1;
-			focusReset = false;
-		}
+		var d = Math.min(MAX_DELTA, s - lastFrame);
 
 		if (state != null) {
-			state.update((s - lastFrame) / 1000);
+			state.update(d / 1000);
 		}
 
 		Ctrl.reset();

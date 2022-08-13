@@ -1,48 +1,41 @@
-package;
+package play;
 
-import js.html.svg.Matrix;
 import math.AABB;
 
-class Player {
-	private static inline var MOVE_SPEED = 200;
-	private static inline var JUMP_SPEED = 300;
-	private static inline var GRAVITY = 400;
+abstract class Mob {
+	private static inline var GRAVITY = 600;
 
 	public var aabb(default, null):AABB = new AABB(0, 0, 32, 64);
 
 	private var x:Float = 0;
 	private var y:Float = 0;
+
+	@:native("xs")
+	private var xSpeed:Float = 0;
+	@:native("ys")
 	private var ySpeed:Float = 0;
 
+	@:native("og")
 	private var onGround = false;
+	@:native("tw")
+	private var touchingWall = false;
 
+	@:native("st")
 	private var state:PlayState;
 
-	public function new(state:PlayState) {
-		x = 1920 / 2;
-		y = 1080 / 2;
+	public function new(state:PlayState, x:Float, y:Float) {
+		this.x = x;
+		this.y = y;
 		this.state = state;
 	}
 
 	@:native("u")
 	public function update(s:Float) {
-		var mx:Float = 0;
-		var my:Float = 0;
-
+		touchingWall = false;
 		ySpeed += GRAVITY * s;
 
-		if (Ctrl.right) {
-			mx = MOVE_SPEED * s;
-		}
-		if (Ctrl.left) {
-			mx = -MOVE_SPEED * s;
-		}
-		if (Ctrl.jump && onGround) {
-			ySpeed = -JUMP_SPEED;
-			onGround = false;
-		}
-
-		my += ySpeed * s;
+		var mx = xSpeed * s;
+		var my = ySpeed * s;
 
 		for (p in state.wall) {
 			if (p.check(aabb, 0, my)) {
@@ -52,10 +45,15 @@ class Player {
 
 				ySpeed = 0;
 				my = aabb.moveContactY(p, my);
+				my = my > 0 ? my - 0.2 : my + 0.2;
 			}
 
 			if (p.check(aabb, mx, 0)) {
 				mx = aabb.moveContactX(p, mx);
+				if (mx != 0) {
+					mx = mx > 0 ? mx - 0.2 : mx + 0.2;
+				}
+				touchingWall = true;
 			}
 		}
 
@@ -63,7 +61,5 @@ class Player {
 		y += my;
 		aabb.x = x;
 		aabb.y = y;
-		Main.context.fillStyle = "#000";
-		Main.context.fillRect(aabb.x, aabb.y, aabb.w, aabb.h);
 	}
 }

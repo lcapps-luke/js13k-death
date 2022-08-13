@@ -1,6 +1,5 @@
 package;
 
-import js.Browser;
 import js.html.CanvasElement;
 import js.html.KeyboardEvent;
 import js.html.MouseEvent;
@@ -98,6 +97,7 @@ class Ctrl {
 		reload = checkKeys(reloadKeys);
 	}
 
+	@:native("ck")
 	private static function checkKeys(kk:Array<String>) {
 		for (k in kk) {
 			if (keys.get(k)) {
