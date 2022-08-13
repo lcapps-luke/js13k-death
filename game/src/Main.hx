@@ -54,7 +54,7 @@ class Main {
 		}
 
 		if (state != null) {
-			state.update(s);
+			state.update((s - lastFrame) / 1000);
 		}
 
 		Ctrl.reset();

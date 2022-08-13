@@ -1,5 +1,6 @@
 package;
 
+import js.Browser;
 import js.html.CanvasElement;
 import js.html.KeyboardEvent;
 import js.html.MouseEvent;
@@ -14,6 +15,25 @@ class Ctrl {
 	public static var my(default, null):Float = 0;
 	private static var mTouch:Int = -1;
 	public static var justReleased(default, null):Bool = false;
+	public static var lastKey(default, null):String = null;
+	public static var lastKeyName(default, null):String = "";
+
+	private static var leftKeys = ["ArrowLeft", "KeyA"];
+	private static var rightKeys = ["ArrowRight", "KeyD"];
+	private static var jumpKeys = ["ArrowUp", "KeyW"];
+	private static var shootKeys = ["KeyX", "KeyJ"];
+	private static var reloadKeys = ["KeyZ", "KeyK", "KeyR"];
+
+	@:native("l")
+	public static var left(default, null):Bool = false;
+	@:native("r")
+	public static var right(default, null):Bool = false;
+	@:native("j")
+	public static var jump(default, null):Bool = false;
+	@:native("s")
+	public static var shoot(default, null):Bool = false;
+	@:native("e")
+	public static var reload(default, null):Bool = false;
 
 	public static function init(w:Window, c:CanvasElement) {
 		Ctrl.keys = new Map<String, Bool>();
@@ -36,6 +56,8 @@ class Ctrl {
 
 	private static function onKeyUp(e:KeyboardEvent) {
 		keys.set(e.code, false);
+		lastKey = e.code;
+		lastKeyName = e.key;
 		updateKeys();
 	}
 
@@ -68,9 +90,25 @@ class Ctrl {
 		}
 	}
 
-	private static function updateKeys() {}
+	private static function updateKeys() {
+		left = checkKeys(leftKeys);
+		right = checkKeys(rightKeys);
+		jump = checkKeys(jumpKeys);
+		shoot = checkKeys(shootKeys);
+		reload = checkKeys(reloadKeys);
+	}
+
+	private static function checkKeys(kk:Array<String>) {
+		for (k in kk) {
+			if (keys.get(k)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public static function reset() {
 		justReleased = false;
+		lastKey = null;
 	}
 }
