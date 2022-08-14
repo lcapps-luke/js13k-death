@@ -7,6 +7,9 @@ abstract class Mob {
 
 	public var aabb(default, null):AABB = new AABB(0, 0, 32, 64);
 
+	@:native("a")
+	public var alive(default, null) = true;
+
 	private var x:Float = 0;
 	private var y:Float = 0;
 
@@ -65,4 +68,7 @@ abstract class Mob {
 		aabb.x = x - aabb.w / 2;
 		aabb.y = y - aabb.h;
 	}
+
+	@:native("h")
+	public function hit(shot:Shot, x:Float, y:Float):Void {}
 }

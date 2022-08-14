@@ -53,7 +53,7 @@ class PlayState extends State {
 			m.update(s);
 		}
 
-		shot.update(s);
+		shot.update(s, this);
 		player.update(s);
 	}
 }

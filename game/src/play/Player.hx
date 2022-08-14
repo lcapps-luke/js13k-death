@@ -43,12 +43,7 @@ class Player extends Mob {
 
 		if (!onGround && touchingWall && ySpeed > 0 && wallGrabTimer > 0) {
 			ySpeed = 0;
-			gravity = 0;
 			wallGrabTimer -= s;
-		}
-
-		if (gravity == 0 && !touchingWall) {
-			gravity = Mob.GRAVITY;
 		}
 
 		super.update(s);
