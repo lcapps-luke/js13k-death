@@ -6,6 +6,7 @@ import play.PlayState;
 class MenuState extends State {
 	private static var TITLE = "Death Game";
 
+	@:native("s")
 	private var startAABB:AABB = new AABB(0, 0, 0, 50);
 
 	override function update(s:Float) {

@@ -35,7 +35,7 @@ abstract class Mob {
 	@:native("u")
 	public function update(s:Float) {
 		touchingWall = false;
-		ySpeed += GRAVITY * s;
+		ySpeed += gravity * s;
 
 		var mx = xSpeed * s;
 		var my = ySpeed * s;
@@ -62,7 +62,7 @@ abstract class Mob {
 
 		x += mx;
 		y += my;
-		aabb.x = x;
-		aabb.y = y;
+		aabb.x = x - aabb.w / 2;
+		aabb.y = y - aabb.h;
 	}
 }

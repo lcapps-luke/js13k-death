@@ -16,8 +16,6 @@ class Main {
 	@:native("l")
 	public static var lastFrame:Float = 0;
 
-	private static var playing:Bool = false;
-
 	private static var state:State = null;
 
 	public static function main() {
@@ -34,6 +32,7 @@ class Main {
 		Browser.window.requestAnimationFrame(update);
 	}
 
+	@:native("r")
 	private static function onResize() {
 		var l = Math.floor((Browser.window.document.body.clientWidth - canvas.clientWidth) / 2);
 		var t = Math.floor((Browser.window.document.body.clientHeight - canvas.clientHeight) / 2);
@@ -41,6 +40,7 @@ class Main {
 		canvas.style.top = '${t}px';
 	}
 
+	@:native("u")
 	private static function update(s:Float) {
 		var d = Math.min(MAX_DELTA, s - lastFrame);
 

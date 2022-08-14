@@ -89,6 +89,7 @@ class Ctrl {
 		}
 	}
 
+	@:native("uk")
 	private static function updateKeys() {
 		left = checkKeys(leftKeys);
 		right = checkKeys(rightKeys);

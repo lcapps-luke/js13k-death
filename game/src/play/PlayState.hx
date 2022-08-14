@@ -3,9 +3,20 @@ package play;
 import math.AABB;
 
 class PlayState extends State {
-	private var player:Player;
+	@:native("p")
+	public var player(default, null):Player;
 
+	@:native("m")
+	public var mobs(default, null):Array<Mob> = [];
+
+	@:native("w")
 	public var wall(default, null):Array<AABB> = [];
+
+	@:native("s")
+	public var shot(default, null) = new Shot();
+
+	@:native("pa")
+	public var particle(default, null):Array<Gore> = [];
 
 	public function new() {
 		super();
@@ -16,6 +27,8 @@ class PlayState extends State {
 			new AABB(200, 1080 / 2, 64, 1080 - 200),
 			new AABB(1920 / 2 + 200, 1080 - 200, 200, 100)
 		];
+
+		mobs.push(new Zombi(this, 1920 / 2 + 300, 1080 - 264));
 	}
 
 	override function update(s:Float) {
@@ -29,6 +42,18 @@ class PlayState extends State {
 			Main.context.fillRect(w.x, w.y, w.w, w.h);
 		}
 
+		for (g in particle) {
+			g.update(s);
+			if (!g.alive) {
+				particle.remove(g);
+			}
+		}
+
+		for (m in mobs) {
+			m.update(s);
+		}
+
+		shot.update(s);
 		player.update(s);
 	}
 }

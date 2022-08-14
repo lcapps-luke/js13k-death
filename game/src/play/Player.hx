@@ -7,7 +7,11 @@ class Player extends Mob {
 	@:native("wgt")
 	private var wallGrabTimer:Float = 0;
 
-	private var canWallGrab:Bool = false;
+	@:native("cs")
+	private var canShoot:Bool = true;
+
+	@:native("fd")
+	private var facingDirection:Int = 1;
 
 	public function new(state:PlayState) {
 		super(state, 1920 / 2, 1080 / 2);
@@ -17,9 +21,11 @@ class Player extends Mob {
 		xSpeed = 0;
 		if (Ctrl.right) {
 			xSpeed = MOVE_SPEED;
+			facingDirection = 1;
 		}
 		if (Ctrl.left) {
 			xSpeed = -MOVE_SPEED;
+			facingDirection = -1;
 		}
 		if (Ctrl.jump && (onGround || (touchingWall && wallGrabTimer > 0))) {
 			ySpeed = -JUMP_SPEED;
@@ -46,6 +52,15 @@ class Player extends Mob {
 		}
 
 		super.update(s);
+
+		if (Ctrl.shoot && canShoot) {
+			canShoot = false;
+			state.shot.fire(x, y - aabb.h * 0.75, facingDirection);
+		}
+
+		if (!Ctrl.shoot) {
+			canShoot = true;
+		}
 
 		Main.context.fillStyle = "#000";
 		Main.context.fillRect(aabb.x, aabb.y, aabb.w, aabb.h);
