@@ -51,9 +51,33 @@ class PlayState extends State {
 
 		for (m in mobs) {
 			m.update(s);
+
+			if (!m.alive) {
+				mobs.remove(m);
+
+				mobs.push(new Zombi(this, 1920 / 2 + 300, 1080 - 264));
+			}
 		}
 
 		shot.update(s, this);
 		player.update(s);
+
+		drawHud();
+	}
+
+	private inline function drawHud() {
+		Main.context.fillStyle = "#000";
+		Main.context.font = "bold 50px Verdana, sans-serif";
+
+		Main.context.fillText('Score: 0000', 10, 60);
+		var s = "";
+		for (i in 0...8) {
+			s += player.ammo > i ? "▮" : "▯";
+		}
+		s = 'Ammo: $s';
+
+		var sw = Main.context.measureText(s).width;
+
+		Main.context.fillText(s, 1910 - sw, 60);
 	}
 }

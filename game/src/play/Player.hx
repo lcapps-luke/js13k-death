@@ -3,6 +3,8 @@ package play;
 class Player extends Mob {
 	private static inline var MOVE_SPEED = 300;
 	private static inline var JUMP_SPEED = 500;
+	private static inline var RELOAD_TIME = 0.5;
+	private static inline var MAX_AMMO = 8;
 
 	@:native("wgt")
 	private var wallGrabTimer:Float = 0;
@@ -12,6 +14,12 @@ class Player extends Mob {
 
 	@:native("fd")
 	private var facingDirection:Int = 1;
+
+	@:native("am")
+	public var ammo(default, null):Int = MAX_AMMO;
+
+	@:native("rt")
+	private var reloadTimer:Float = 0;
 
 	public function new(state:PlayState) {
 		super(state, 1920 / 2, 1080 / 2);
@@ -48,13 +56,29 @@ class Player extends Mob {
 
 		super.update(s);
 
-		if (Ctrl.shoot && canShoot) {
+		if (Ctrl.shoot && canShoot && ammo > 0) {
 			canShoot = false;
 			state.shot.fire(x, y - aabb.h * 0.75, facingDirection);
+			ammo--;
+			reloadTimer = 0;
 		}
 
 		if (!Ctrl.shoot) {
 			canShoot = true;
+		}
+
+		if (Ctrl.reload && ammo < MAX_AMMO && reloadTimer <= 0) {
+			reloadTimer = RELOAD_TIME;
+		}
+
+		if (reloadTimer > 0) {
+			reloadTimer -= s;
+			if (reloadTimer < 0) {
+				ammo++;
+				if (ammo != MAX_AMMO) {
+					reloadTimer = RELOAD_TIME;
+				}
+			}
 		}
 
 		Main.context.fillStyle = "#000";

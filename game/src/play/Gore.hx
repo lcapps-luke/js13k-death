@@ -20,6 +20,8 @@ class Gore {
 	@:native("st")
 	private var state:PlayState;
 
+	private var t:Float = 5;
+
 	public function new(state:PlayState, x:Float, y:Float, xs:Float = 0, ys:Float = 0, w:Float = 16, h:Float = 16) {
 		this.state = state;
 		aabb.x = x;
@@ -50,7 +52,12 @@ class Gore {
 		aabb.x += mx;
 		aabb.y += my;
 
-		Main.context.fillStyle = "#F00";
+		t -= s;
+		if (t < 0) {
+			alive = false;
+		}
+
+		Main.context.fillStyle = 'rgba(255, 0, 0, ${t})';
 		Main.context.fillRect(aabb.x, aabb.y, aabb.w, aabb.h);
 	}
 }

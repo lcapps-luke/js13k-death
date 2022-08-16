@@ -28,8 +28,11 @@ class Zombi extends Mob {
 	override public function hit(shot:Shot, x:Float, y:Float) {
 		if (Math.abs(this.x - shot.x) < SPLAT_RANGE) {
 			alive = false;
-			for (i in 0...10) {
-				var g = new Gore(state, x, y - aabb.h / 2, shot.direction * 300, -200 + Math.random() * 200);
+			for (i in 0...50) {
+				var gx = aabb.x + Math.random() * aabb.w;
+				var gy = aabb.y + Math.random() * aabb.h;
+
+				var g = new Gore(state, gx, gy, shot.direction * 300, -200 + Math.random() * 200);
 				state.particle.push(g);
 			}
 		}
