@@ -1,7 +1,14 @@
 package play;
 
+import math.AABB;
+
 class Zombi extends Mob {
 	private static inline var SPLAT_RANGE:Float = 128;
+
+	@:native("at")
+	private var attackTimer:Float = 2;
+	@:native("ab")
+	private var attackBox:AABB = new AABB(0, 0, 64, 32);
 
 	override function update(s:Float) {
 		if (!alive) {
@@ -14,6 +21,17 @@ class Zombi extends Mob {
 			xSpeed = state.player.x > x ? 100 : -100;
 			if (Math.abs(x - state.player.x) < getAttackDistance()) {
 				xSpeed = 0;
+				attackTimer -= s;
+			}
+		}
+
+		if (attackTimer < 0) {
+			attackTimer = 2;
+			attackBox.x = state.player.x < x ? x - 80 : x + 16;
+			attackBox.y = y - 48;
+
+			if (state.player.aabb.check(attackBox)) {
+				state.player.hit(null, x, y);
 			}
 		}
 

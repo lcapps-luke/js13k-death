@@ -21,12 +21,27 @@ class Player extends Mob {
 	@:native("rt")
 	private var reloadTimer:Float = 0;
 
+	@:native("it")
+	private var invincibilityTimer:Float = -1;
+
+	@:native("sh")
+	private var shield:Bool = true;
+
 	public function new(state:PlayState) {
 		super(state, 1920 / 2, 1080 / 2);
 	}
 
 	override public function update(s:Float) {
-		xSpeed = 0;
+		if (!alive) {
+			return;
+		}
+
+		if (invincibilityTimer > 0) {
+			invincibilityTimer -= s;
+		}
+		else {
+			xSpeed = 0;
+		}
 		if (Ctrl.right) {
 			xSpeed = MOVE_SPEED;
 			facingDirection = 1;
@@ -83,5 +98,24 @@ class Player extends Mob {
 
 		Main.context.fillStyle = "#000";
 		Main.context.fillRect(aabb.x, aabb.y, aabb.w, aabb.h);
+	}
+
+	override function hit(shot:Shot, x:Float, y:Float) {
+		if (invincibilityTimer < 0) {
+			invincibilityTimer = 0.5;
+
+			if (shield) {
+				shield = false;
+				// TODO shield destroy effect
+			}
+			else {
+				// die
+				alive = false;
+			}
+
+			onGround = false;
+			xSpeed = x > this.x ? -200 : 200;
+			ySpeed = -100;
+		}
 	}
 }
