@@ -1,9 +1,14 @@
 package play;
 
 import math.AABB;
+import math.Vec2;
+import play.StageBuilder.Door;
 import play.StageBuilder.Room;
+import play.StageBuilder.Stage;
 
 class PlayState extends State {
+	private var stage:Stage;
+
 	@:native("p")
 	public var player(default, null):Player;
 
@@ -13,19 +18,25 @@ class PlayState extends State {
 	@:native("w")
 	public var wall(default, null):Array<AABB> = [];
 
+	@:native("d")
+	private var door:Array<Door> = [];
+
 	@:native("s")
 	public var shot(default, null) = new Shot();
 
 	@:native("pa")
 	public var particle(default, null):Array<Gore> = [];
 
-	public function new(room:Room) {
+	public function new(stg:Stage, roomId:Int, point:Vec2) {
 		super();
+		this.stage = stg;
 
-		var ps = room.playerSpawns[0];
-		player = new Player(this, ps.x, ps.y);
+		var room = stg.rooms[roomId];
+
+		player = new Player(this, point.x, point.y);
 
 		wall = room.walls;
+		door = room.doors;
 
 		for (e in room.enemySpawns) {
 			mobs.push(new Zombi(this, e.x, e.y));
@@ -55,19 +66,25 @@ class PlayState extends State {
 
 			if (!m.alive) {
 				mobs.remove(m);
-
-				mobs.push(new Zombi(this, 1920 / 2 + 300, 1080 - 264));
 			}
 		}
 
 		shot.update(s, this);
 		player.update(s);
 
+		for (d in door) {
+			if (d.aabb.check(player.aabb)) {
+				Main.setState(new PlayState(stage, d.targetRoom, d.playerSpawn));
+			}
+		}
+
 		drawHud();
 	}
 
 	private inline function drawHud() {
-		Main.context.fillStyle = "#000";
+		Main.context.strokeStyle = "#000";
+		Main.context.fillStyle = "#FFF";
+		Main.context.lineWidth = 5;
 		Main.context.font = "bold 50px Verdana, sans-serif";
 
 		Main.context.fillText('Score: 0000', 10, 60);
@@ -79,6 +96,7 @@ class PlayState extends State {
 
 		var sw = Main.context.measureText(s).width;
 
+		Main.context.strokeText(s, 1910 - sw, 60);
 		Main.context.fillText(s, 1910 - sw, 60);
 	}
 }

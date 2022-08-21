@@ -1,11 +1,4 @@
 { "compressionlevel":-1,
- "editorsettings":
-    {
-     "export":
-        {
-         "target":"."
-        }
-    },
  "height":135,
  "infinite":false,
  "layers":[
@@ -17,18 +10,18 @@
          "objects":[
                 {
                  "height":264,
-                 "id":7,
+                 "id":1,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":2000,
-                 "x":0,
+                 "width":2080,
+                 "x":-80,
                  "y":816
                 }, 
                 {
                  "height":264,
-                 "id":8,
+                 "id":2,
                  "name":"",
                  "rotation":0,
                  "type":"",
@@ -38,19 +31,19 @@
                  "y":0
                 }, 
                 {
-                 "height":552,
-                 "id":9,
+                 "height":256,
+                 "id":3,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":96,
-                 "x":0,
+                 "width":176,
+                 "x":-80,
                  "y":264
                 }, 
                 {
                  "height":256,
-                 "id":10,
+                 "id":4,
                  "name":"",
                  "rotation":0,
                  "type":"",
@@ -66,13 +59,48 @@
          "y":0
         }, 
         {
+         "color":"#ff0000",
          "draworder":"topdown",
-         "id":6,
+         "id":4,
+         "name":"enemy",
+         "objects":[
+                {
+                 "height":0,
+                 "id":7,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":960,
+                 "y":816
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":3,
          "name":"door",
          "objects":[
                 {
                  "height":296,
-                 "id":11,
+                 "id":5,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":-80,
+                 "y":520
+                }, 
+                {
+                 "height":296,
+                 "id":6,
                  "name":"",
                  "rotation":0,
                  "type":"",
@@ -86,33 +114,9 @@
          "visible":true,
          "x":0,
          "y":0
-        }, 
-        {
-         "color":"#0000ff",
-         "draworder":"topdown",
-         "id":4,
-         "name":"player",
-         "objects":[
-                {
-                 "height":0,
-                 "id":5,
-                 "name":"",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":240,
-                 "y":816
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
         }],
- "nextlayerid":7,
- "nextobjectid":12,
+ "nextlayerid":5,
+ "nextobjectid":8,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",

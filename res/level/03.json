@@ -1,11 +1,4 @@
 { "compressionlevel":-1,
- "editorsettings":
-    {
-     "export":
-        {
-         "target":"."
-        }
-    },
  "height":135,
  "infinite":false,
  "layers":[
@@ -17,18 +10,18 @@
          "objects":[
                 {
                  "height":264,
-                 "id":7,
+                 "id":1,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":2000,
-                 "x":0,
+                 "x":-80,
                  "y":816
                 }, 
                 {
                  "height":264,
-                 "id":8,
+                 "id":2,
                  "name":"",
                  "rotation":0,
                  "type":"",
@@ -39,24 +32,24 @@
                 }, 
                 {
                  "height":552,
-                 "id":9,
+                 "id":3,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":96,
-                 "x":0,
+                 "x":1824,
                  "y":264
                 }, 
                 {
                  "height":256,
-                 "id":10,
+                 "id":4,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":176,
-                 "x":1824,
+                 "x":-80,
                  "y":264
                 }],
          "opacity":1,
@@ -66,19 +59,20 @@
          "y":0
         }, 
         {
+         "color":"#00aa00",
          "draworder":"topdown",
-         "id":6,
+         "id":3,
          "name":"door",
          "objects":[
                 {
                  "height":296,
-                 "id":11,
+                 "id":5,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":1936,
+                 "x":-80,
                  "y":520
                 }],
          "opacity":1,
@@ -95,14 +89,14 @@
          "objects":[
                 {
                  "height":0,
-                 "id":5,
+                 "id":6,
                  "name":"",
                  "point":true,
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":240,
+                 "x":1616,
                  "y":816
                 }],
          "opacity":1,
@@ -111,8 +105,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":7,
- "nextobjectid":12,
+ "nextlayerid":5,
+ "nextobjectid":7,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",

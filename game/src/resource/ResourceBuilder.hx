@@ -9,7 +9,7 @@ import sys.io.File;
 
 class ResourceBuilder {
 	macro public static function buildLevelDefinitions():ExprOf<Array<Array<Int>>> {
-		var res = new Array<Array<Float>>();
+		var res = new Array<Array<Int>>();
 
 		var path = "res/level/";
 		for (f in FileSystem.readDirectory(path)) {
@@ -23,56 +23,67 @@ class ResourceBuilder {
 	private static function buildLevel(path) {
 		var json:TiledMap = cast Json.parse(File.getContent(path));
 
-		var walls = new Array<Dynamic>();
-		var players = new Array<Dynamic>();
-		var enemies = new Array<Dynamic>();
+		var walls = new Array<TiledObject>();
+		var players = new Array<TiledObject>();
+		var enemies = new Array<TiledObject>();
+		var doors = new Array<TiledObject>();
+		var gates = new Array<TiledObject>();
+		var triggers = new Array<TiledObject>();
 
 		for (l in json.layers) {
 			if (l.type != "objectgroup") {
 				continue;
 			}
 
-			if (l.name == "wall") {
-				for (o in l.objects) {
-					walls.push(o);
-				}
-			}
-
-			if (l.name == "player") {
-				for (o in l.objects) {
-					players.push(o);
-				}
-			}
-
-			if (l.name == "enemy") {
-				for (o in l.objects) {
-					enemies.push(o);
-				}
+			switch (l.name) {
+				case "wall":
+					addAll(walls, l.objects);
+				case "player":
+					addAll(players, l.objects);
+				case "enemy":
+					addAll(enemies, l.objects);
+				case "door":
+					addAll(doors, l.objects);
+				case "gate":
+					addAll(gates, l.objects);
+				case "trigger":
+					addAll(triggers, l.objects);
 			}
 		}
 
-		var level = new Array<Float>();
-		level.push(walls.length);
-		for (w in walls) {
-			level.push(w.x);
-			level.push(w.y);
-			level.push(w.width);
-			level.push(w.height);
-		}
-
-		level.push(players.length);
-		for (p in players) {
-			level.push(p.x);
-			level.push(p.y);
-		}
-
-		level.push(enemies.length);
-		for (e in enemies) {
-			level.push(e.x);
-			level.push(e.y);
-		}
+		var level = new Array<Int>();
+		pushRects(level, walls);
+		pushPoints(level, players);
+		pushPoints(level, enemies);
+		pushRects(level, doors);
+		pushRects(level, gates);
+		pushRects(level, triggers);
 
 		return level;
+	}
+
+	private static function addAll(arr:Array<TiledObject>, src:Array<TiledObject>) {
+		for (o in src) {
+			arr.push(o);
+		}
+	}
+
+	private static function pushRects(arr:Array<Int>, obj:Array<TiledObject>) {
+		arr.push(obj.length);
+		for (o in obj) {
+			arr.push(Math.round(o.x));
+			arr.push(Math.round(o.y));
+			arr.push(Math.round(o.width));
+			arr.push(Math.round(o.height));
+		}
+	}
+
+	private static function pushPoints(arr:Array<Int>, obj:Array<TiledObject>) {
+		arr.push(obj.length);
+		for (o in obj) {
+			arr.push(Math.round(o.x));
+			arr.push(Math.round(o.y));
+		}
 	}
 	#end
 }
