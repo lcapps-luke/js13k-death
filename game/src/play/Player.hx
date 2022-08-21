@@ -27,8 +27,8 @@ class Player extends Mob {
 	@:native("sh")
 	private var shield:Bool = true;
 
-	public function new(state:PlayState) {
-		super(state, 1920 / 2, 1080 / 2);
+	public function new(state:PlayState, x:Float, y:Float) {
+		super(state, x, y);
 	}
 
 	override public function update(s:Float) {

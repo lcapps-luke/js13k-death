@@ -3,6 +3,8 @@ package;
 import js.Browser;
 import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
+import play.StageBuilder;
+import resource.ResourceBuilder;
 
 class Main {
 	private static inline var MAX_DELTA = 1000 / 12;
@@ -26,6 +28,7 @@ class Main {
 		onResize();
 
 		Ctrl.init(Browser.window, canvas);
+		StageBuilder.init();
 
 		state = new MenuState();
 

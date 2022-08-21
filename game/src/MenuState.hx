@@ -2,6 +2,7 @@ package;
 
 import math.AABB;
 import play.PlayState;
+import play.StageBuilder;
 
 class MenuState extends State {
 	private static var TITLE = "Death Game";
@@ -28,7 +29,8 @@ class MenuState extends State {
 		Main.context.fillText(txt, 1920 / 2 - w / 2, startAABB.y + startAABB.h);
 
 		if (Ctrl.justReleased && startAABB.contains(Ctrl.mx, Ctrl.my)) {
-			Main.setState(new PlayState());
+			var stg = StageBuilder.createStage();
+			Main.setState(new PlayState(stg[0]));
 		}
 	}
 }

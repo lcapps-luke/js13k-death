@@ -1,6 +1,7 @@
 package play;
 
 import math.AABB;
+import play.StageBuilder.Room;
 
 class PlayState extends State {
 	@:native("p")
@@ -18,17 +19,17 @@ class PlayState extends State {
 	@:native("pa")
 	public var particle(default, null):Array<Gore> = [];
 
-	public function new() {
+	public function new(room:Room) {
 		super();
 
-		player = new Player(this);
-		wall = [
-			new AABB(0, 1080 - 64, 1920, 64),
-			new AABB(200, 1080 / 2, 64, 1080 - 200),
-			new AABB(1920 / 2 + 200, 1080 - 200, 200, 100)
-		];
+		var ps = room.playerSpawns[0];
+		player = new Player(this, ps.x, ps.y);
 
-		mobs.push(new Zombi(this, 1920 / 2 + 300, 1080 - 264));
+		wall = room.walls;
+
+		for (e in room.enemySpawns) {
+			mobs.push(new Zombi(this, e.x, e.y));
+		}
 	}
 
 	override function update(s:Float) {
