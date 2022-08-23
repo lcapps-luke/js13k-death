@@ -8,7 +8,7 @@ import math.Vec2;
 class Shot {
 	private static inline var SHOT_QTY = 5;
 
-	public var aabb(default, null):AABB = new AABB(0, 0, 300, 32);
+	public var aabb(default, null):AABB = new AABB(0, 0, 600, 32);
 
 	@:native("a")
 	public var active(default, null):Bool = false;
@@ -31,6 +31,7 @@ class Shot {
 		if (active) {
 			active = false;
 			Main.context.strokeStyle = "#FF0";
+			Main.context.lineWidth = 1;
 
 			// find wall collision candidates
 			var walls:Array<AABB> = [];

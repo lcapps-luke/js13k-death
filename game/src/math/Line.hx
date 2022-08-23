@@ -23,4 +23,9 @@ class Line {
 		v.x = b.x - a.x;
 		v.y = b.y - a.y;
 	}
+
+	@:native("d")
+	public static function distance(ax:Float = 0, ay:Float = 0, bx:Float = 0, by:Float = 0) {
+		return Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2));
+	}
 }

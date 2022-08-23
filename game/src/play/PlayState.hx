@@ -1,12 +1,15 @@
 package play;
 
 import math.AABB;
+import math.Line;
 import math.Vec2;
+import play.Player.PlayerState;
 import play.StageBuilder.Door;
-import play.StageBuilder.Room;
 import play.StageBuilder.Stage;
 
 class PlayState extends State {
+	private static inline var ENEMY_SPAWN_DISTANCE:Float = 300;
+
 	private var stage:Stage;
 
 	@:native("p")
@@ -27,19 +30,24 @@ class PlayState extends State {
 	@:native("pa")
 	public var particle(default, null):Array<Gore> = [];
 
-	public function new(stg:Stage, roomId:Int, point:Vec2) {
+	public function new(stg:Stage, rid:Int, p:Vec2, ps:PlayerState = null) {
 		super();
 		this.stage = stg;
 
-		var room = stg.rooms[roomId];
+		var room = stg.rooms[rid];
 
-		player = new Player(this, point.x, point.y);
+		player = new Player(this, p.x, p.y);
+		if (ps != null) {
+			player.setState(ps);
+		}
 
 		wall = room.walls;
 		door = room.doors;
 
 		for (e in room.enemySpawns) {
-			mobs.push(new Zombi(this, e.x, e.y));
+			if (Line.distance(p.x, p.y, e.x, e.y) > ENEMY_SPAWN_DISTANCE) {
+				mobs.push(new Zombi(this, e.x, e.y));
+			}
 		}
 	}
 
@@ -74,7 +82,7 @@ class PlayState extends State {
 
 		for (d in door) {
 			if (d.aabb.check(player.aabb)) {
-				Main.setState(new PlayState(stage, d.targetRoom, d.playerSpawn));
+				Main.setState(new PlayState(stage, d.targetRoom, d.playerSpawn, player.getState()));
 			}
 		}
 
@@ -87,6 +95,7 @@ class PlayState extends State {
 		Main.context.lineWidth = 5;
 		Main.context.font = "bold 50px Verdana, sans-serif";
 
+		Main.context.strokeText('Score: 0000', 10, 60);
 		Main.context.fillText('Score: 0000', 10, 60);
 		var s = "";
 		for (i in 0...8) {

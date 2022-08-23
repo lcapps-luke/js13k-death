@@ -118,4 +118,29 @@ class Player extends Mob {
 			ySpeed = -100;
 		}
 	}
+
+	@:native("gs")
+	public function getState():PlayerState {
+		return {
+			a: ammo,
+			s: shield,
+			ys: ySpeed,
+			xs: xSpeed
+		}
+	}
+
+	@:native("ss")
+	public function setState(s:PlayerState) {
+		this.ammo = s.a;
+		this.shield = s.s;
+		this.ySpeed = s.ys;
+		this.xSpeed = s.xs;
+	}
+}
+
+typedef PlayerState = {
+	var a:Int;
+	var xs:Float;
+	var ys:Float;
+	var s:Bool;
 }

@@ -3,7 +3,7 @@ package play;
 import math.AABB;
 
 class Zombi extends Mob {
-	private static inline var SPLAT_RANGE:Float = 128;
+	private static inline var SPLAT_RANGE:Float = 200;
 
 	@:native("at")
 	private var attackTimer:Float = 2;

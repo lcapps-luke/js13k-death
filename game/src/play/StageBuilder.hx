@@ -7,8 +7,10 @@ import math.Vec2;
 import resource.ResourceBuilder;
 
 class StageBuilder {
-	private static inline var LEFT = 0;
+	private static inline var LEFT = -1;
 	private static inline var RIGHT = 1;
+	private static inline var TOP = -2;
+	private static inline var BOTTOM = 2;
 
 	@:native("R")
 	private static var ROOM:Array<RoomTemplate>;
@@ -19,6 +21,10 @@ class StageBuilder {
 	private static var ROOM_LEFT_DOOR:Array<RoomTemplateDoor>;
 	@:native("RRD")
 	private static var ROOM_RIGHT_DOOR:Array<RoomTemplateDoor>;
+	@:native("RTD")
+	private static var ROOM_TOP_DOOR:Array<RoomTemplateDoor>;
+	@:native("RBD")
+	private static var ROOM_BOTTOM_DOOR:Array<RoomTemplateDoor>;
 
 	@:native("i")
 	public static function init() {
@@ -26,10 +32,12 @@ class StageBuilder {
 		ROOM_END = new Array<Int>();
 		ROOM_LEFT_DOOR = new Array<RoomTemplateDoor>();
 		ROOM_RIGHT_DOOR = new Array<RoomTemplateDoor>();
+		ROOM_TOP_DOOR = new Array<RoomTemplateDoor>();
+		ROOM_BOTTOM_DOOR = new Array<RoomTemplateDoor>();
 
 		var r = 0;
 		for (d in ResourceBuilder.buildLevelDefinitions()) {
-			ROOM.push(makeRoom(d, r));
+			ROOM.push(makeRoomTemplate(d, r));
 			r++;
 		}
 	}
@@ -43,7 +51,7 @@ class StageBuilder {
 	 * triggerCount: x, y, width, height
 	**/
 	@:native("mr")
-	private static function makeRoom(d:Array<Int>, idx:Int):RoomTemplate {
+	private static function makeRoomTemplate(d:Array<Int>, idx:Int):RoomTemplate {
 		var it = d.iterator();
 		var wall = loadAABBs(it);
 		var player = loadVec2s(it);
@@ -58,26 +66,35 @@ class StageBuilder {
 
 		for (d in 0...door.length) {
 			var r = {
-				roomIdx: idx,
-				doorIdx: d
+				r: idx,
+				d: d
 			}
 
-			if (door[d].pos == LEFT) {
-				ROOM_LEFT_DOOR.push(r);
-			}
-			else {
-				ROOM_RIGHT_DOOR.push(r);
-			}
+			getDoorSet(door[d].p).push(r);
 		}
 
 		return {
-			walls: wall,
-			playerSpawns: player,
-			enemySpawns: enemy,
-			doors: door,
-			gates: gate,
-			triggers: trigger
+			w: wall,
+			p: player,
+			e: enemy,
+			d: door,
+			g: gate,
+			t: trigger
 		};
+	}
+
+	private static inline function getDoorSet(id:Int):Array<RoomTemplateDoor> {
+		return switch (id) {
+			case TOP: ROOM_TOP_DOOR;
+			case BOTTOM: ROOM_BOTTOM_DOOR;
+			case LEFT: ROOM_LEFT_DOOR;
+			case RIGHT: ROOM_RIGHT_DOOR;
+			default: throw 'Unknown Door set $id';
+		}
+	}
+
+	private static inline function invertDoorPos(id:Int):Int {
+		return id * -1;
 	}
 
 	@:native("la")
@@ -107,36 +124,52 @@ class StageBuilder {
 	@:native("ld")
 	private static function loadDoors(arr:ArrayIterator<Int>):Array<DoorTemplate> {
 		return loadAABBs(arr).map(a -> {
+			var p = 0;
+
+			if (a.x > 1920) {
+				p = RIGHT;
+			}
+			else if (a.x + a.w < 0) {
+				p = LEFT;
+			}
+			else if (a.y > 1080) {
+				p = BOTTOM;
+			}
+			else {
+				p = TOP;
+			}
+
 			return {
-				aabb: a,
-				pos: a.x < 0 ? LEFT : RIGHT
+				a: a,
+				p: p
 			};
 		});
 	}
 
 	@:native("cs")
 	public static function createStage(length:Int = 4):Stage {
-		var startTpl = chooseRandomRoomTemplate(ROOM_END);
+		var startRooms = ROOM_END.filter(i -> {
+			for (r in ROOM_TOP_DOOR) {
+				if (r.r == i) {
+					return false;
+				}
+			}
+			return true;
+		});
+
+		var startTpl = chooseRandomRoomTemplate(startRooms);
 		var rooms = new Array<Room>();
 
 		var startDoors = new Array<Door>();
-		var start:Room = {
-			walls: startTpl.walls,
-			enemySpawns: startTpl.enemySpawns,
-			doors: startDoors,
-			triggers: startTpl.triggers,
-			gates: startTpl.gates,
-			isArena: false
-		}
-		rooms.push(start);
+		rooms.push(makeRoom(startTpl, startDoors));
 		var roomId = rooms.length - 1;
 
-		for (d in startTpl.doors) {
+		for (d in startTpl.d) {
 			var spwn = getDoorSpawnPos(d);
 
-			var next = createNextRoom(rooms, d.pos, roomId, spwn, length - 1);
+			var next = createNextRoom(rooms, d.p, roomId, spwn, length - 1);
 			startDoors.push({
-				aabb: d.aabb,
+				aabb: d.a,
 				targetRoom: next.r,
 				playerSpawn: next.p
 			});
@@ -145,42 +178,34 @@ class StageBuilder {
 		return {
 			rooms: rooms,
 			resRoom: roomId,
-			resPoint: startTpl.playerSpawns[0]
+			resPoint: startTpl.p[0]
 		};
 	}
 
 	@:native("cnr")
 	static function createNextRoom(rooms:Array<Room>, fromPos:Int, fromRoomId:Int, fromRoomSpwn:Vec2, len:Int) {
-		var toPos = fromPos == LEFT ? RIGHT : LEFT;
-		var set = fromPos == LEFT ? ROOM_RIGHT_DOOR : ROOM_LEFT_DOOR;
+		var toPos = invertDoorPos(fromPos);
+		var set = getDoorSet(toPos);
 		if (len == 0) {
-			set = set.filter(t -> ROOM_END.contains(t.roomIdx));
+			set = set.filter(t -> ROOM_END.contains(t.r));
 		}
 		else {
-			set = set.filter(t -> !ROOM_END.contains(t.roomIdx));
+			set = set.filter(t -> !ROOM_END.contains(t.r));
 		}
 
 		var tgt = Rand.chooseItem(set);
-		var tpl = ROOM[tgt.roomIdx];
+		var tpl = ROOM[tgt.r];
 
 		var doors = new Array<Door>();
-		var room:Room = {
-			walls: tpl.walls,
-			enemySpawns: tpl.enemySpawns,
-			doors: doors,
-			triggers: tpl.triggers,
-			gates: tpl.gates,
-			isArena: false
-		};
-		rooms.push(room);
+		rooms.push(makeRoom(tpl, doors));
 		var roomId = rooms.length - 1;
 
 		var pos = new Vec2();
-		for (d in tpl.doors) {
-			if (d.pos == toPos) {
+		for (d in tpl.d) {
+			if (d.p == toPos) {
 				pos = getDoorSpawnPos(d);
 				doors.push({
-					aabb: d.aabb,
+					aabb: d.a,
 					targetRoom: fromRoomId,
 					playerSpawn: fromRoomSpwn
 				});
@@ -188,9 +213,9 @@ class StageBuilder {
 			}
 
 			var spwn = getDoorSpawnPos(d);
-			var next = createNextRoom(rooms, d.pos, roomId, spwn, len - 1);
+			var next = createNextRoom(rooms, d.p, roomId, spwn, len - 1);
 			doors.push({
-				aabb: d.aabb,
+				aabb: d.a,
 				targetRoom: next.r,
 				playerSpawn: next.p
 			});
@@ -202,83 +227,76 @@ class StageBuilder {
 		};
 	}
 
+	@:native("mkr")
+	static function makeRoom(t:RoomTemplate, d:Array<Door>, a:Bool = false):Room {
+		return {
+			walls: t.w,
+			enemySpawns: t.e,
+			doors: d,
+			triggers: t.t,
+			gates: t.g,
+			isArena: a
+		};
+	}
+
 	@:native("dgsp")
 	static function getDoorSpawnPos(d:DoorTemplate):Vec2 {
-		return switch (d.pos) {
+		return switch (d.p) {
 			case LEFT:
-				new Vec2(d.aabb.x + d.aabb.w + 17, d.aabb.y + d.aabb.h);
+				new Vec2(d.a.x + d.a.w + 17, d.a.y + d.a.h);
 			case RIGHT:
-				new Vec2(d.aabb.x - 17, d.aabb.y + d.aabb.h);
+				new Vec2(d.a.x - 17, d.a.y + d.a.h);
+			case TOP:
+				new Vec2(d.a.x + d.a.w / 2, d.a.y + d.a.h + 65);
+			case BOTTOM:
+				new Vec2(d.a.x + d.a.w / 2, d.a.y - 1);
 			default:
-				throw 'Unknown position ${d.pos}';
+				throw 'Unknown position ${d.p}';
 		}
 	}
 
 	@:native("crrt")
 	static function chooseRandomRoomTemplate(ids:Array<Int>) {
-		var i = ids[Math.floor(Math.random() * ids.length)];
-		return ROOM[i];
+		return ROOM[Rand.chooseItem(ids)];
 	}
 }
 
 typedef Stage = {
-	@:native("r")
 	var rooms:Array<Room>;
-	@:native("o")
 	var resRoom:Int;
-	@:native("p")
 	var resPoint:Vec2;
 }
 
 typedef RoomTemplate = {
-	@:native("w")
-	var walls:Array<AABB>;
-	@:native("p")
-	var playerSpawns:Array<Vec2>;
-	@:native("e")
-	var enemySpawns:Array<Vec2>;
-	@:native("d")
-	var doors:Array<DoorTemplate>;
-	@:native("g")
-	var gates:Array<AABB>;
-	@:native("t")
-	var triggers:Array<AABB>;
+	var w:Array<AABB>;
+	var p:Array<Vec2>;
+	var e:Array<Vec2>;
+	var d:Array<DoorTemplate>;
+	var g:Array<AABB>;
+	var t:Array<AABB>;
 }
 
 typedef DoorTemplate = {
-	@:native("a")
-	var aabb:AABB;
-	@:native("p")
-	var pos:Int;
+	var a:AABB;
+	var p:Int;
 }
 
 typedef RoomTemplateDoor = {
-	@:native("r")
-	var roomIdx:Int;
-	@:native("d")
-	var doorIdx:Int;
+	var r:Int;
+	var d:Int;
 }
 
 typedef Room = {
-	@:native("w")
 	var walls:Array<AABB>;
-	@:native("e")
 	var enemySpawns:Array<Vec2>;
-	@:native("d")
 	var doors:Array<Door>;
-	@:native("g")
 	var gates:Array<AABB>;
-	@:native("t")
 	var triggers:Array<AABB>;
-	@:native("a")
 	var isArena:Bool;
 }
 
 typedef Door = {
-	@:native("a")
 	var aabb:AABB;
-	@:native("t")
 	var targetRoom:Int;
-	@:native("p")
 	var playerSpawn:Vec2;
 }
