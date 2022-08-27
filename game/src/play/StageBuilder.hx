@@ -161,7 +161,7 @@ class StageBuilder {
 		var rooms = new Array<Room>();
 
 		var startDoors = new Array<Door>();
-		rooms.push(makeRoom(startTpl, startDoors));
+		rooms.push(makeRoom(startTpl, startDoors, length));
 		var roomId = rooms.length - 1;
 
 		for (d in startTpl.d) {
@@ -197,7 +197,7 @@ class StageBuilder {
 		var tpl = ROOM[tgt.r];
 
 		var doors = new Array<Door>();
-		rooms.push(makeRoom(tpl, doors));
+		rooms.push(makeRoom(tpl, doors, rooms.length + len));
 		var roomId = rooms.length - 1;
 
 		var pos = new Vec2();
@@ -228,14 +228,17 @@ class StageBuilder {
 	}
 
 	@:native("mkr")
-	static function makeRoom(t:RoomTemplate, d:Array<Door>, a:Bool = false):Room {
+	static function makeRoom(t:RoomTemplate, d:Array<Door>, s:Int):Room {
+		var a = t.t.length > 0 && Math.random() > 0.8;
+
 		return {
 			walls: t.w,
 			enemySpawns: t.e,
 			doors: d,
 			triggers: t.t,
 			gates: t.g,
-			isArena: a
+			isArena: a,
+			q: s + Math.round(Math.random() * (s * 2))
 		};
 	}
 
@@ -293,6 +296,7 @@ typedef Room = {
 	var gates:Array<AABB>;
 	var triggers:Array<AABB>;
 	var isArena:Bool;
+	var q:Int;
 }
 
 typedef Door = {

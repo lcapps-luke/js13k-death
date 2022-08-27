@@ -5,12 +5,18 @@ import math.Line;
 import math.Vec2;
 import play.Player.PlayerState;
 import play.StageBuilder.Door;
+import play.StageBuilder.Room;
 import play.StageBuilder.Stage;
 
 class PlayState extends State {
 	private static inline var ENEMY_SPAWN_DISTANCE:Float = 300;
+	private static inline var ARENA_SPAWN_INTERVAL:Float = 5;
 
+	@:native("t")
 	private var stage:Stage;
+
+	@:native("r")
+	private var room:Room;
 
 	@:native("p")
 	public var player(default, null):Player;
@@ -30,11 +36,13 @@ class PlayState extends State {
 	@:native("pa")
 	public var particle(default, null):Array<Gore> = [];
 
+	@:native("a")
+	private var arenaTimer:Float = -1;
+
 	public function new(stg:Stage, rid:Int, p:Vec2, ps:PlayerState = null) {
 		super();
 		this.stage = stg;
-
-		var room = stg.rooms[rid];
+		this.room = stg.rooms[rid];
 
 		player = new Player(this, p.x, p.y);
 		if (ps != null) {
@@ -44,10 +52,8 @@ class PlayState extends State {
 		wall = room.walls;
 		door = room.doors;
 
-		for (e in room.enemySpawns) {
-			if (Line.distance(p.x, p.y, e.x, e.y) > ENEMY_SPAWN_DISTANCE) {
-				mobs.push(new Zombi(this, e.x, e.y));
-			}
+		if (!room.isArena) {
+			spawnWave();
 		}
 	}
 
@@ -86,6 +92,35 @@ class PlayState extends State {
 			}
 		}
 
+		if (room.isArena && room.q > 0 && arenaTimer < 0) {
+			for (t in room.triggers) {
+				if (t.check(player.aabb)) {
+					for (g in room.gates) {
+						wall.push(g);
+					}
+
+					spawnWave(room.q);
+					arenaTimer = ARENA_SPAWN_INTERVAL;
+				}
+			}
+		}
+
+		if (arenaTimer > 0) {
+			arenaTimer -= s;
+			if (arenaTimer < 0) {
+				spawnWave(room.q);
+				arenaTimer = ARENA_SPAWN_INTERVAL;
+			}
+
+			if (mobs.length == 0) {
+				arenaTimer = 0;
+
+				for (g in room.gates) {
+					wall.remove(g);
+				}
+			}
+		}
+
 		drawHud();
 	}
 
@@ -107,5 +142,31 @@ class PlayState extends State {
 
 		Main.context.strokeText(s, 1910 - sw, 60);
 		Main.context.fillText(s, 1910 - sw, 60);
+
+		if (arenaTimer > 0) {
+			s = Std.string(mobs.length + room.q);
+			sw = Main.context.measureText(s).width;
+
+			Main.context.strokeText(s, 1910 / 2 - sw / 2, 60);
+			Main.context.fillText(s, 1910 / 2 - sw / 2, 60);
+		}
+	}
+
+	private function spawnWave(m:Int = -1) {
+		if (m == 0) {
+			return;
+		}
+
+		var qty = 0;
+		for (e in room.enemySpawns) {
+			if (Line.distance(player.aabb.x, player.aabb.y, e.x, e.y) > ENEMY_SPAWN_DISTANCE) {
+				mobs.push(new Zombi(this, e.x, e.y));
+				room.q--;
+				qty++;
+				if (m > 0 && qty == m) {
+					return;
+				}
+			}
+		}
 	}
 }
