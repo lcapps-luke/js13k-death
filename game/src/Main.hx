@@ -4,6 +4,7 @@ import js.Browser;
 import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
 import play.StageBuilder;
+import resource.Images;
 import resource.ResourceBuilder;
 
 class Main {
@@ -29,8 +30,9 @@ class Main {
 
 		Ctrl.init(Browser.window, canvas);
 		StageBuilder.init();
-
-		state = new MenuState();
+		Images.load(() -> {
+			state = new MenuState();
+		});
 
 		Browser.window.requestAnimationFrame(update);
 	}

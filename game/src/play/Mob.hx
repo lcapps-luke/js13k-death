@@ -5,7 +5,7 @@ import math.AABB;
 abstract class Mob {
 	private static inline var GRAVITY = 600;
 
-	public var aabb(default, null):AABB = new AABB(0, 0, 32, 64);
+	public var aabb(default, null):AABB = new AABB(0, 0, 10, 64);
 
 	@:native("a")
 	public var alive(default, null) = true;
@@ -43,6 +43,9 @@ abstract class Mob {
 		var mx = xSpeed * s;
 		var my = ySpeed * s;
 
+		if (ySpeed > 20) {
+			onGround = false;
+		}
 		for (p in state.wall) {
 			if (p.check(aabb, 0, my)) {
 				if (ySpeed > 0) {

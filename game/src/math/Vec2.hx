@@ -15,6 +15,12 @@ class Vec2 {
 		this.y = y;
 	}
 
+	@:native("o")
+	public function copy(o:Vec2) {
+		this.x = o.x;
+		this.y = o.y;
+	}
+
 	@:native("d")
 	public function distanceTo(x:Float, y:Float):Float {
 		return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2));
@@ -23,5 +29,27 @@ class Vec2 {
 	@:native("c")
 	public function clone() {
 		return new Vec2(x, y);
+	}
+
+	@:native("u")
+	public function sub(o:Vec2) {
+		this.x -= o.x;
+		this.y -= o.y;
+	}
+
+	@:native("m")
+	public function mul(v:Float) {
+		this.x *= v;
+		this.y *= v;
+	}
+
+	@:native("a")
+	public function add(o:Vec2) {
+		this.x += o.x;
+		this.y += o.y;
+	}
+
+	public function dirTo(o:Vec2) {
+		return Math.atan2(o.y - y, o.x - x);
 	}
 }
