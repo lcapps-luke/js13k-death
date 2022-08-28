@@ -13,6 +13,16 @@ class AABB {
 		this.h = h;
 	}
 
+	@:native("cx")
+	public function centerX():Float {
+		return x + w / 2;
+	}
+
+	@:native("cy")
+	public function centerY():Float {
+		return y + h / 2;
+	}
+
 	@:native("c")
 	public inline function contains(ox:Float, oy:Float):Bool {
 		return !(ox < x || ox > x + w || oy < y || oy > y + h);

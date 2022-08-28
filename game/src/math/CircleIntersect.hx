@@ -44,4 +44,9 @@ class CircleIntersect {
 	public function getLeftmost():Vec2 {
 		return ia.x < ib.x ? ia : ib;
 	}
+
+	@:native("c")
+	public function getClosest(i:Vec2) {
+		return ia.distanceTo(i.x, i.y) < ib.distanceTo(i.x, i.y) ? ia : ib;
+	}
 }
