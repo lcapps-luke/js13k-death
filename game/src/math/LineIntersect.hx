@@ -13,11 +13,7 @@ class LineIntersect {
 
 	@:native("u")
 	public function update():Bool {
-		if (!calculateMultipliers()) {
-			return false;
-		}
-
-		if ((am < 0 || am > 1) || (bm < 0 || bm > 1)) {
+		if (!calculateMultipliers() || (am < 0 || am > 1) || (bm < 0 || bm > 1)) {
 			return false;
 		}
 

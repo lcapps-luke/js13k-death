@@ -89,7 +89,7 @@ class StageBuilder {
 			case BOTTOM: ROOM_BOTTOM_DOOR;
 			case LEFT: ROOM_LEFT_DOOR;
 			case RIGHT: ROOM_RIGHT_DOOR;
-			default: throw 'Unknown Door set $id';
+			default: throw '$id';
 		}
 	}
 
@@ -254,7 +254,7 @@ class StageBuilder {
 			case BOTTOM:
 				new Vec2(d.a.x + d.a.w / 2, d.a.y - 1);
 			default:
-				throw 'Unknown position ${d.p}';
+				throw '${d.p}';
 		}
 	}
 

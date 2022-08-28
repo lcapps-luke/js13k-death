@@ -18,9 +18,6 @@ class CircleIntersect {
 		if (d > ca.r + cb.r) {
 			// set centerpoint
 			var d = ca.p.dirTo(cb.p);
-			var dx = cb.p.x - ca.p.x;
-			var dy = cb.p.y - ca.p.y;
-
 			ia.set(ca.p.x + Math.cos(d) * ca.r, ca.p.y + Math.sin(d) * ca.r);
 			ib.copy(ia);
 			return false;
@@ -28,10 +25,7 @@ class CircleIntersect {
 
 		var a = (ca.r * ca.r - cb.r * cb.r + d * d) / (d * 2);
 		var h = Math.sqrt(ca.r * ca.r - a * a);
-		p.copy(cb.p);
-		p.sub(ca.p);
-		p.mul(a / d);
-		p.add(ca.p);
+		p.copy(cb.p).sub(ca.p).mul(a / d).add(ca.p);
 
 		ia.x = p.x + h * (cb.p.y - ca.p.y) / d;
 		ia.y = p.y - h * (cb.p.x - ca.p.x) / d;
@@ -49,9 +43,5 @@ class CircleIntersect {
 	@:native("gl")
 	public function getLeftmost():Vec2 {
 		return ia.x < ib.x ? ia : ib;
-	}
-
-	public function angle() {
-		return Math.atan2(ib.y - ia.y, ib.x - ia.x);
 	}
 }

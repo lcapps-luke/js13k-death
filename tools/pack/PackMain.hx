@@ -14,7 +14,11 @@ class PackMain {
 	private static inline var finalMinifiedDir:String = finalDir + "min/";
 	private static inline var packageFile:String = finalDir + "death.zip";
 
+	private static var lastSize:Int = -1;
+
 	public static function main() {
+		lastSize = FileSystem.stat(packageFile).size;
+
 		clean();
 		build();
 		minify();
@@ -84,5 +88,7 @@ class PackMain {
 		var bytes:Int = FileSystem.stat(packageFile).size;
 		trace(Std.string(bytes / 1024) + " / 13kb bytes used!");
 		trace(Std.string((bytes / 1024) / 0.13) + "%");
+
+		trace(Std.string(bytes - lastSize) + " bytes from last build");
 	}
 }

@@ -27,8 +27,8 @@ class Images {
 		var d = "data:image/svg+xml;base64," + Browser.window.btoa(str);
 		var i:ImageElement = cast Browser.window.document.createElement("img");
 		i.onload = loadCallback;
-		i.onerror = function() {
-			Browser.console.error("Failed to load image resource");
+		i.onerror = function(e) {
+			Browser.console.error(e);
 		}
 		i.setAttribute("src", d);
 

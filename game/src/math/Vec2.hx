@@ -19,6 +19,7 @@ class Vec2 {
 	public function copy(o:Vec2) {
 		this.x = o.x;
 		this.y = o.y;
+		return this;
 	}
 
 	@:native("d")
@@ -35,20 +36,24 @@ class Vec2 {
 	public function sub(o:Vec2) {
 		this.x -= o.x;
 		this.y -= o.y;
+		return this;
 	}
 
 	@:native("m")
 	public function mul(v:Float) {
 		this.x *= v;
 		this.y *= v;
+		return this;
 	}
 
 	@:native("a")
 	public function add(o:Vec2) {
 		this.x += o.x;
 		this.y += o.y;
+		return this;
 	}
 
+	@:native("i")
 	public function dirTo(o:Vec2) {
 		return Math.atan2(o.y - y, o.x - x);
 	}

@@ -13,8 +13,11 @@ class Ctrl {
 	public static var mx(default, null):Float = 0;
 	public static var my(default, null):Float = 0;
 	private static var mTouch:Int = -1;
+	@:native("jr")
 	public static var justReleased(default, null):Bool = false;
+	@:native("lk")
 	public static var lastKey(default, null):String = null;
+	@:native("lkn")
 	public static var lastKeyName(default, null):String = "";
 
 	private static var leftKeys = ["ArrowLeft", "KeyA"];
