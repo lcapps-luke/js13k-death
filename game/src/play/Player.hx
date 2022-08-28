@@ -173,7 +173,7 @@ class Player extends Mob {
 			}
 		}
 
-		Main.context.fillStyle = "#00F";
+		// Main.context.fillStyle = "#00F";
 		// Main.context.fillRect(aabb.x, aabb.y, aabb.w, aabb.h);
 
 		// calculate limb targets

@@ -5,16 +5,15 @@ import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
 import play.StageBuilder;
 import resource.Images;
-import resource.ResourceBuilder;
 
 class Main {
 	private static inline var MAX_DELTA = 1000 / 12;
 
 	@:native("e")
-	private static var canvas:CanvasElement;
+	public static var canvas(default, null):CanvasElement;
 
 	@:native("c")
-	public static var context:CanvasRenderingContext2D;
+	public static var context(default, null):CanvasRenderingContext2D;
 
 	@:native("l")
 	public static var lastFrame:Float = 0;
@@ -49,11 +48,14 @@ class Main {
 	private static function update(s:Float) {
 		var d = Math.min(MAX_DELTA, s - lastFrame);
 
+		Ctrl.update();
+
 		if (state != null) {
 			state.update(d / 1000);
 		}
 
 		Ctrl.reset();
+		Ctrl.draw();
 
 		lastFrame = s;
 		Browser.window.requestAnimationFrame(update);

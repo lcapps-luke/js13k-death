@@ -81,11 +81,7 @@ class PlayState extends State {
 		}
 
 		if (resPoint != null) {
-			if (arenaTimer > 0) {
-				Main.context.globalAlpha = 0.5;
-			}
-
-			Main.context.fillStyle = "#00F";
+			Main.context.fillStyle = (arenaTimer > 0 || mobs.length > 0) ? "#00F8" : "#00F";
 			Main.context.fillRect(resPoint.x, resPoint.y, resPoint.w, resPoint.h);
 			Main.context.globalAlpha = 1;
 
