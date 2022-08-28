@@ -2,6 +2,7 @@ package play;
 
 import math.Circle;
 import math.CircleIntersect;
+import math.Line;
 import math.Vec2;
 import resource.Images;
 import resource.Sprite;
@@ -49,6 +50,7 @@ class Player extends Mob {
 	private var armF:Limb;
 	private var armB:Limb;
 	private var gun:Sprite;
+	private var reloadLine:Line = new Line();
 
 	public function new(state:PlayState, x:Float, y:Float) {
 		super(state, x, y);
@@ -148,7 +150,7 @@ class Player extends Mob {
 
 		if (Ctrl.shoot && canShoot && ammo > 0) {
 			canShoot = false;
-			state.shot.fire(x, y - aabb.h * 0.75, facingDirection);
+			state.shot.fire(x + facingDirection * 20, y - aabb.h * 0.77, facingDirection);
 			ammo--;
 			reloadTimer = 0;
 		}
@@ -192,10 +194,29 @@ class Player extends Mob {
 
 		armMath.ca.p.set(aabb.centerX(), aabb.y + aabb.h * 0.22);
 		armIk.set(aabb.centerX() + (facingDirection * -10), aabb.y + aabb.h);
-		frontHand.set(aabb.centerX() + (facingDirection * 10), aabb.y + aabb.h * 0.27);
-		backHand.set(aabb.centerX() + (facingDirection * 18), aabb.y + aabb.h * 0.23);
 
-		gun.p.copy(frontHand);
+		if (reloadTimer > 0) {
+			reloadLine.a.set(aabb.centerX() + (facingDirection * 10), aabb.y + aabb.h * 0.20); // gun
+			reloadLine.b.set(aabb.centerX(), aabb.y + aabb.h * 0.53); // pocket
+			reloadLine.normalize();
+
+			var rh = RELOAD_TIME / 2;
+			var rp = reloadTimer > rh ? RELOAD_TIME - reloadTimer : reloadTimer;
+			reloadLine.tweenPosition(rp / rh, frontHand);
+
+			backHand.set(aabb.centerX() + (facingDirection * 10), aabb.y + aabb.h * 0.20);
+
+			gun.p.copy(backHand);
+			gun.a = facingDirection * -Math.PI / 2;
+			gun.o.set(52, 8);
+		}
+		else {
+			frontHand.set(aabb.centerX() + (facingDirection * 10), aabb.y + aabb.h * 0.27);
+			backHand.set(aabb.centerX() + (facingDirection * 18), aabb.y + aabb.h * 0.23);
+			gun.p.copy(frontHand);
+			gun.a = 0;
+			gun.o.set(5, 16);
+		}
 		gun.c.x = facingDirection * Math.abs(gun.c.x);
 
 		// render body

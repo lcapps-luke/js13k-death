@@ -28,4 +28,9 @@ class Line {
 	public static function distance(ax:Float = 0, ay:Float = 0, bx:Float = 0, by:Float = 0) {
 		return Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2));
 	}
+
+	@:native("t")
+	public function tweenPosition(p:Float, q:Vec2) {
+		q.set(a.x + v.x * p, a.y + v.y * p);
+	}
 }
