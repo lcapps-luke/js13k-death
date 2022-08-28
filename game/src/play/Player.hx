@@ -108,6 +108,10 @@ class Player extends Mob {
 			}
 		}
 
+		if (!onGround) {
+			reloadTimer = -1;
+		}
+
 		// Main.context.fillStyle = "#00F";
 		// Main.context.fillRect(aabb.x, aabb.y, aabb.w, aabb.h);
 

@@ -217,7 +217,7 @@ class PlayState extends State {
 
 		var qty = 0;
 		for (e in room.enemySpawns) {
-			if (Line.distance(player.aabb.x, player.aabb.y, e.x, e.y) > ENEMY_SPAWN_DISTANCE) {
+			if (Line.distance(player.x, player.y, e.x, e.y) > ENEMY_SPAWN_DISTANCE) {
 				mobs.push(new Zombi(this, e.x, e.y));
 				room.q--;
 				qty++;
