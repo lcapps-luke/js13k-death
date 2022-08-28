@@ -5,14 +5,13 @@ import math.AABB;
 import math.Circle;
 import math.CircleIntersect;
 import math.Vec2;
-import resource.Images;
 import resource.Sprite;
 
 abstract class Mob {
 	public static inline var BASE_HEIGHT = 124;
 	private static inline var GRAVITY = 600;
 
-	public var aabb(default, null):AABB = new AABB(0, 0, 10, 64);
+	public var aabb(default, null):AABB = new AABB(0, 0, 20, BASE_HEIGHT);
 
 	@:native("a")
 	public var alive(default, null) = true;
@@ -55,10 +54,16 @@ abstract class Mob {
 	private var armF:Limb;
 	private var armB:Limb;
 
-	public function new(state:PlayState, x:Float, y:Float, img:ImageElement) {
+	private var scale:Float;
+
+	public function new(state:PlayState, x:Float, y:Float, img:ImageElement, s:Float = 1) {
 		this.x = x;
 		this.y = y;
 		this.state = state;
+		this.scale = s;
+
+		this.aabb.w *= s;
+		this.aabb.h *= s;
 
 		var sc = aabb.h / 231;
 
@@ -84,7 +89,7 @@ abstract class Mob {
 		u.c.set(sc, sc);
 
 		var l = new Sprite(i, 0, 133, 35, 74);
-		l.o.x = 12;
+		l.o.x = 15;
 		l.o.y = 5;
 		l.c.set(sc, sc);
 
@@ -148,19 +153,19 @@ abstract class Mob {
 
 		// calculate walk cycle
 		if (onGround && xSpeed != 0) {
-			walkCycle += (xSpeed * 0.07) * s;
-			frontFoot.x = aabb.centerX() + Math.cos(walkCycle) * 16;
-			frontFoot.y = aabb.y + Math.min(aabb.h + Math.sin(walkCycle) * 8, aabb.h);
+			walkCycle += (xSpeed * (0.035 / scale)) * s;
+			frontFoot.x = aabb.centerX() + Math.cos(walkCycle) * (32 * scale);
+			frontFoot.y = aabb.y + Math.min(aabb.h + Math.sin(walkCycle) * (8 * scale), aabb.h);
 
-			backFoot.x = aabb.centerX() + Math.cos(walkCycle + Math.PI) * 16;
-			backFoot.y = aabb.y + Math.min(aabb.h + Math.sin(walkCycle + Math.PI) * 8, aabb.h);
+			backFoot.x = aabb.centerX() + Math.cos(walkCycle + Math.PI) * (32 * scale);
+			backFoot.y = aabb.y + Math.min(aabb.h + Math.sin(walkCycle + Math.PI) * (8 * scale), aabb.h);
 		}
 		else {
 			frontFoot.set(aabb.centerX(), aabb.y + aabb.h);
 			backFoot.set(aabb.centerX(), aabb.y + aabb.h);
 		}
 		legMath.ca.p.set(aabb.centerX(), aabb.y + aabb.h * 0.53);
-		legIk.set(aabb.centerX() + (100 * facingDirection), aabb.centerY());
+		legIk.set(aabb.centerX() + (200 * scale * facingDirection), aabb.centerY());
 	}
 
 	@:native("rl")

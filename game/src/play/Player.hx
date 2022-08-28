@@ -116,7 +116,7 @@ class Player extends Mob {
 		armIk.set(aabb.centerX() + (facingDirection * -10), aabb.y + aabb.h);
 
 		if (reloadTimer > 0) {
-			reloadLine.a.set(aabb.centerX() + (facingDirection * 10), aabb.y + aabb.h * 0.20); // gun
+			reloadLine.a.set(aabb.centerX() + (facingDirection * 20 * scale), aabb.y + aabb.h * 0.20); // gun
 			reloadLine.b.set(aabb.centerX(), aabb.y + aabb.h * 0.53); // pocket
 			reloadLine.normalize();
 
@@ -124,15 +124,15 @@ class Player extends Mob {
 			var rp = reloadTimer > rh ? RELOAD_TIME - reloadTimer : reloadTimer;
 			reloadLine.tweenPosition(rp / rh, frontHand);
 
-			backHand.set(aabb.centerX() + (facingDirection * 10), aabb.y + aabb.h * 0.20);
+			backHand.set(aabb.centerX() + (facingDirection * 20 * scale), aabb.y + aabb.h * 0.20);
 
 			gun.p.copy(backHand);
 			gun.a = facingDirection * -Math.PI / 2;
 			gun.o.set(52, 8);
 		}
 		else {
-			frontHand.set(aabb.centerX() + (facingDirection * 10), aabb.y + aabb.h * 0.27);
-			backHand.set(aabb.centerX() + (facingDirection * 18), aabb.y + aabb.h * 0.23);
+			frontHand.set(aabb.centerX() + (facingDirection * 20 * scale), aabb.y + aabb.h * 0.27);
+			backHand.set(aabb.centerX() + (facingDirection * 36 * scale), aabb.y + aabb.h * 0.23);
 			gun.p.copy(frontHand);
 			gun.a = 0;
 			gun.o.set(5, 16);

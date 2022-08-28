@@ -6,7 +6,7 @@ import math.Line;
 import resource.Images;
 
 class Zombi extends Mob {
-	private static inline var ATTACK_TIMER:Float = 0.8;
+	private static inline var ATTACK_TIMER:Float = 0.5;
 	private static inline var ATTACK_FROM:Float = ATTACK_TIMER * 0.15;
 	private static inline var SPLAT_RANGE:Float = 200;
 
@@ -20,7 +20,7 @@ class Zombi extends Mob {
 	private var armWobble:Float = 0;
 
 	public function new(s:PlayState, x:Float, y:Float) {
-		super(s, x, y, Images.zombi);
+		super(s, x, y, Images.zombi, 0.8 + Math.random() * 0.2);
 	}
 
 	override function update(s:Float) {
@@ -58,7 +58,7 @@ class Zombi extends Mob {
 			}
 
 			// attack anim
-			attackLine.a.set(aabb.centerX() + (facingDirection * 21), aabb.y + aabb.h * 0.23); // out
+			attackLine.a.set(aabb.centerX() + (facingDirection * 42 * scale), aabb.y + aabb.h * 0.23); // out
 			attackLine.b.set(aabb.centerX(), aabb.y - aabb.h * 0.15); // above
 			attackLine.normalize();
 
@@ -71,10 +71,10 @@ class Zombi extends Mob {
 			armWobble += Math.PI * s;
 
 			var awo = Math.sin(armWobble) * aabb.h * 0.05;
-			frontHand.set(aabb.centerX() + (facingDirection * 21), aabb.y + aabb.h * 0.23 + awo);
+			frontHand.set(aabb.centerX() + (facingDirection * 42 * scale), aabb.y + aabb.h * 0.23 + awo);
 
 			awo = Math.cos(armWobble) * aabb.h * 0.05;
-			backHand.set(aabb.centerX() + (facingDirection * 21), aabb.y + aabb.h * 0.23 + awo);
+			backHand.set(aabb.centerX() + (facingDirection * 42 * scale), aabb.y + aabb.h * 0.23 + awo);
 		}
 
 		// render body
