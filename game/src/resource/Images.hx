@@ -1,11 +1,15 @@
 package resource;
 
+import haxe.Resource;
 import js.Browser;
 import js.html.svg.ImageElement;
 
 class Images {
 	@:native("p")
 	public static var player:ImageElement;
+
+	@:native("z")
+	public static var zombi:ImageElement;
 
 	@:native("q")
 	private static var qty = 0;
@@ -18,6 +22,7 @@ class Images {
 		Images.callback = callback;
 
 		player = loadImage(ResourceBuilder.buildImage("player.svg"));
+		zombi = loadImage(ResourceBuilder.buildImage("zombi.svg"));
 	}
 
 	@:native("i")
