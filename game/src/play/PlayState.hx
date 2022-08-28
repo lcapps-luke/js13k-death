@@ -46,6 +46,9 @@ class PlayState extends State {
 	@:native("rp")
 	private var resPoint:AABB = null;
 
+	@:native("ep")
+	private var endPoint:AABB = null;
+
 	public function new(stg:Stage, rid:Int, p:Vec2, ps:PlayerState = null) {
 		super();
 		this.stage = stg;
@@ -66,6 +69,10 @@ class PlayState extends State {
 
 		if (stg.deathRoom == rid) {
 			resPoint = new AABB(stg.deathPoint.x - 16, stg.deathPoint.y - 32, 32, 32);
+		}
+
+		if (room.e != null) {
+			endPoint = new AABB(room.e.x - 16, room.e.y - 32, 32, 32);
 		}
 	}
 
@@ -90,6 +97,15 @@ class PlayState extends State {
 				stage.resPoint = stage.deathPoint;
 				stage.deathRoom = -1;
 				resPoint = null;
+			}
+		}
+
+		if (endPoint != null) {
+			Main.context.fillStyle = "#FF0";
+			Main.context.fillRect(endPoint.x, endPoint.y, endPoint.w, endPoint.h);
+			if (endPoint.check(player.aabb)) {
+				// next stage
+				Main.setState(new NextState(stage.n));
 			}
 		}
 
@@ -171,8 +187,9 @@ class PlayState extends State {
 		Main.context.lineWidth = 5;
 		Main.context.font = "bold 50px Verdana, sans-serif";
 
-		Main.context.strokeText('Score: 0000', 10, 60);
-		Main.context.fillText('Score: 0000', 10, 60);
+		var stxt = 'Stage: ${stage.n}';
+		Main.context.strokeText(stxt, 10, 60);
+		Main.context.fillText(stxt, 10, 60);
 		var s = "";
 		for (i in 0...8) {
 			s += player.ammo > i ? "▮" : "▯";

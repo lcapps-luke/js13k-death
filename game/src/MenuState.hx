@@ -36,7 +36,7 @@ class MenuState extends State {
 
 		if (Ctrl.justReleased) {
 			if (startAABB.contains(Ctrl.mx, Ctrl.my)) {
-				var stg = StageBuilder.createStage();
+				var stg = StageBuilder.createStage(4, 1);
 				Main.setState(new PlayState(stg, stg.resRoom, stg.resPoint));
 			}
 

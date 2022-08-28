@@ -147,7 +147,7 @@ class StageBuilder {
 	}
 
 	@:native("cs")
-	public static function createStage(length:Int = 4):Stage {
+	public static function createStage(length:Int, n:Int):Stage {
 		var startRooms = ROOM_END.filter(i -> {
 			for (r in ROOM_TOP_DOOR) {
 				if (r.r == i) {
@@ -163,6 +163,7 @@ class StageBuilder {
 		var startDoors = new Array<Door>();
 		rooms.push(makeRoom(startTpl, startDoors, length));
 		var roomId = rooms.length - 1;
+		rooms[0].e = null;
 
 		for (d in startTpl.d) {
 			var spwn = getDoorSpawnPos(d);
@@ -180,7 +181,8 @@ class StageBuilder {
 			resRoom: roomId,
 			resPoint: startTpl.p[0],
 			deathRoom: -1,
-			deathPoint: new Vec2()
+			deathPoint: new Vec2(),
+			n: n
 		};
 	}
 
@@ -240,7 +242,8 @@ class StageBuilder {
 			triggers: t.t,
 			gates: t.g,
 			isArena: a,
-			q: s + Math.round(Math.random() * (s * 2))
+			q: s + Math.round(Math.random() * (s * 2)),
+			e: t.d.length == 1 ? t.p[0] : null
 		};
 	}
 
@@ -252,7 +255,7 @@ class StageBuilder {
 			case RIGHT:
 				new Vec2(d.a.x - 17, d.a.y + d.a.h);
 			case TOP:
-				new Vec2(d.a.x + d.a.w / 2, d.a.y + d.a.h + 65);
+				new Vec2(d.a.x + d.a.w / 2, d.a.y + d.a.h + Mob.BASE_HEIGHT);
 			case BOTTOM:
 				new Vec2(d.a.x + d.a.w / 2, d.a.y - 1);
 			default:
@@ -272,6 +275,7 @@ typedef Stage = {
 	var resPoint:Vec2;
 	var deathRoom:Int;
 	var deathPoint:Vec2;
+	var n:Int;
 }
 
 typedef RoomTemplate = {
@@ -301,6 +305,7 @@ typedef Room = {
 	var triggers:Array<AABB>;
 	var isArena:Bool;
 	var q:Int;
+	var e:Vec2;
 }
 
 typedef Door = {

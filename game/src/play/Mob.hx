@@ -9,6 +9,7 @@ import resource.Images;
 import resource.Sprite;
 
 abstract class Mob {
+	public static inline var BASE_HEIGHT = 124;
 	private static inline var GRAVITY = 600;
 
 	public var aabb(default, null):AABB = new AABB(0, 0, 10, 64);
