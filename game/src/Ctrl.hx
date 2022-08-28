@@ -45,7 +45,10 @@ class Ctrl {
 
 	@:native("osb")
 	private static var onScreenButtons:Array<OnScreenButton>;
+
+	@:native("tl")
 	private static var touchList = new Map<Int, Vec2>();
+	@:native("ut")
 	private static var usingTouchscreen:Bool = false;
 
 	public static function init(w:Window, c:CanvasElement) {
@@ -104,23 +107,28 @@ class Ctrl {
 		];
 	}
 
+	@:native("okd")
 	private static function onKeyDown(e:KeyboardEvent) {
 		keys.set(e.code, true);
 	}
 
+	@:native("oku")
 	private static function onKeyUp(e:KeyboardEvent) {
 		keys.set(e.code, false);
 	}
 
+	@:native("omm")
 	private static function onMouseMove(e:MouseEvent) {
 		mx = (e.offsetX / c.clientWidth) * c.width;
 		my = (e.offsetY / c.clientHeight) * c.height;
 	}
 
+	@:native("omu")
 	private static function onMouseUp(e:MouseEvent) {
 		justReleased = true;
 	}
 
+	@:native("ots")
 	private static function onTouchStart(e:TouchEvent) {
 		e.preventDefault();
 
@@ -140,6 +148,7 @@ class Ctrl {
 		usingTouchscreen = true;
 	}
 
+	@:native("otm")
 	private static function onTouchMove(e:TouchEvent) {
 		e.preventDefault();
 
@@ -164,6 +173,7 @@ class Ctrl {
 		return ((t.clientY - c.offsetTop) / c.clientHeight) * c.height;
 	}
 
+	@:native("ote")
 	private static function onTouchEnd(e:TouchEvent) {
 		e.preventDefault();
 
@@ -215,6 +225,7 @@ class Ctrl {
 		return false;
 	}
 
+	@:native("cosb")
 	private static function checkOnScreenButton(id:Int):Bool {
 		var b = onScreenButtons[id];
 
@@ -227,10 +238,12 @@ class Ctrl {
 		return false;
 	}
 
+	@:native("re")
 	public static function reset() {
 		justReleased = false;
 	}
 
+	@:native("d")
 	public static function draw() {
 		if (usingTouchscreen) {
 			Main.context.font = "bold 35px Verdana, sans-serif";

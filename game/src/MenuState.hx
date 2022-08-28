@@ -7,8 +7,8 @@ import play.StageBuilder;
 
 class MenuState extends State {
 	private static var TITLE = "Death Game";
-	private static var OPT_FROM:Float = 1080 / 2;
-	private static var OPT_GAP:Float = OPT_FROM / 2 - 50;
+	private static inline var OPT_FROM:Float = 1080 / 2;
+	private static inline var OPT_GAP:Float = OPT_FROM / 2 - 50;
 
 	@:native("st")
 	private static var START_TEXT = "Start";
