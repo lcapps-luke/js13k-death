@@ -10,8 +10,8 @@ abstract class Mob {
 	@:native("a")
 	public var alive(default, null) = true;
 
-	private var x:Float = 0;
-	private var y:Float = 0;
+	public var x(default, null):Float = 0;
+	public var y(default, null):Float = 0;
 
 	@:native("g")
 	private var gravity:Float = GRAVITY;

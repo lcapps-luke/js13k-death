@@ -17,6 +17,7 @@ class PlayState extends State {
 
 	@:native("r")
 	private var room:Room;
+	private var roomId:Int;
 
 	@:native("p")
 	public var player(default, null):Player;
@@ -39,9 +40,16 @@ class PlayState extends State {
 	@:native("a")
 	private var arenaTimer:Float = -1;
 
+	@:native("dt")
+	private var deathTimer:Float = 1;
+
+	@:native("rp")
+	private var resPoint:AABB = null;
+
 	public function new(stg:Stage, rid:Int, p:Vec2, ps:PlayerState = null) {
 		super();
 		this.stage = stg;
+		this.roomId = rid;
 		this.room = stg.rooms[rid];
 
 		player = new Player(this, p.x, p.y);
@@ -55,6 +63,10 @@ class PlayState extends State {
 		if (!room.isArena) {
 			spawnWave();
 		}
+
+		if (stg.deathRoom == rid) {
+			resPoint = new AABB(stg.deathPoint.x - 16, stg.deathPoint.y - 32, 32, 32);
+		}
 	}
 
 	override function update(s:Float) {
@@ -66,6 +78,23 @@ class PlayState extends State {
 		Main.context.fillStyle = "#000";
 		for (w in wall) {
 			Main.context.fillRect(w.x, w.y, w.w, w.h);
+		}
+
+		if (resPoint != null) {
+			if (arenaTimer > 0) {
+				Main.context.globalAlpha = 0.5;
+			}
+
+			Main.context.fillStyle = "#00F";
+			Main.context.fillRect(resPoint.x, resPoint.y, resPoint.w, resPoint.h);
+			Main.context.globalAlpha = 1;
+
+			if (arenaTimer <= 0 && resPoint.check(player.aabb)) {
+				stage.resRoom = stage.deathRoom;
+				stage.resPoint = stage.deathPoint;
+				stage.deathRoom = -1;
+				resPoint = null;
+			}
 		}
 
 		for (g in particle) {
@@ -85,6 +114,14 @@ class PlayState extends State {
 
 		shot.update(s, this);
 		player.update(s);
+
+		if (!player.alive) {
+			deathTimer -= s;
+
+			if (deathTimer < 0) {
+				restartStage();
+			}
+		}
 
 		for (d in door) {
 			if (d.aabb.check(player.aabb)) {
@@ -107,12 +144,13 @@ class PlayState extends State {
 
 		if (arenaTimer > 0) {
 			arenaTimer -= s;
-			if (arenaTimer < 0) {
+
+			if (arenaTimer < 0 || mobs.length < 2) {
 				spawnWave(room.q);
 				arenaTimer = ARENA_SPAWN_INTERVAL;
 			}
 
-			if (mobs.length == 0) {
+			if (mobs.length == 0 && room.q == 0) {
 				arenaTimer = 0;
 
 				for (g in room.gates) {
@@ -122,6 +160,13 @@ class PlayState extends State {
 		}
 
 		drawHud();
+	}
+
+	private inline function restartStage() {
+		this.stage.deathRoom = roomId;
+		this.stage.deathPoint.set(player.x, player.y);
+
+		Main.setState(new PlayState(stage, stage.resRoom, stage.resPoint));
 	}
 
 	private inline function drawHud() {

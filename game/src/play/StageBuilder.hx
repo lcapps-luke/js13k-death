@@ -178,7 +178,9 @@ class StageBuilder {
 		return {
 			rooms: rooms,
 			resRoom: roomId,
-			resPoint: startTpl.p[0]
+			resPoint: startTpl.p[0],
+			deathRoom: -1,
+			deathPoint: new Vec2()
 		};
 	}
 
@@ -268,6 +270,8 @@ typedef Stage = {
 	var rooms:Array<Room>;
 	var resRoom:Int;
 	var resPoint:Vec2;
+	var deathRoom:Int;
+	var deathPoint:Vec2;
 }
 
 typedef RoomTemplate = {
