@@ -1,9 +1,6 @@
 package play;
 
-import math.Circle;
-import math.CircleIntersect;
 import math.Line;
-import math.Vec2;
 import resource.Images;
 import resource.Sprite;
 

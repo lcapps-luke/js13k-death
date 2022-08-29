@@ -62,8 +62,10 @@ abstract class Mob {
 		this.state = state;
 		this.scale = s;
 
-		this.aabb.w *= s;
-		this.aabb.h *= s;
+		aabb.w *= s;
+		aabb.h *= s;
+		aabb.x = x - aabb.w / 2;
+		aabb.y = y - aabb.h;
 
 		var sc = aabb.h / 231;
 

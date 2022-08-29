@@ -9,6 +9,7 @@ class Zombi extends Mob {
 	private static inline var ATTACK_TIMER:Float = 0.5;
 	private static inline var ATTACK_FROM:Float = ATTACK_TIMER * 0.15;
 	private static inline var SPLAT_RANGE:Float = 200;
+	private static inline var JUMP_SPEED = 500;
 
 	@:native("at")
 	private var attackTimer:Float = 0;
@@ -19,8 +20,11 @@ class Zombi extends Mob {
 	@:native("aw")
 	private var armWobble:Float = 0;
 
+	private var wsp:Float;
+
 	public function new(s:PlayState, x:Float, y:Float) {
 		super(s, x, y, Images.zombi, 0.8 + Math.random() * 0.2);
+		wsp = 100 + Math.random() * 100;
 	}
 
 	override function update(s:Float) {
@@ -31,7 +35,7 @@ class Zombi extends Mob {
 		super.update(s);
 
 		if (onGround && attackTimer <= 0) {
-			xSpeed = state.player.x > x ? 100 : -100;
+			xSpeed = state.player.x > x ? wsp : -wsp;
 			if (Math.abs(x - state.player.x) < getAttackDistance()) {
 				xSpeed = 0;
 
@@ -39,6 +43,11 @@ class Zombi extends Mob {
 			}
 			else {
 				facingDirection = xSpeed > 0 ? 1 : -1;
+			}
+
+			if (touchingWall) {
+				ySpeed = -JUMP_SPEED;
+				onGround = false;
 			}
 		}
 
