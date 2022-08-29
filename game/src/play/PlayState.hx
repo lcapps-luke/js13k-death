@@ -10,7 +10,8 @@ import play.StageBuilder.Stage;
 
 class PlayState extends State {
 	private static inline var ENEMY_SPAWN_DISTANCE:Float = 300;
-	private static inline var ARENA_SPAWN_INTERVAL:Float = 5;
+	private static inline var ARENA_SPAWN_INTERVAL_MIN:Float = 0.5;
+	private static inline var ARENA_SPAWN_INTERVAL_MAX:Float = 3;
 
 	@:native("t")
 	private var stage:Stage;
@@ -39,6 +40,8 @@ class PlayState extends State {
 
 	@:native("a")
 	private var arenaTimer:Float = -1;
+	@:native("ast")
+	private var arenaSpawnTimer:Float = ARENA_SPAWN_INTERVAL_MAX;
 
 	@:native("dt")
 	private var deathTimer:Float = 1;
@@ -65,6 +68,9 @@ class PlayState extends State {
 
 		if (!room.isArena) {
 			spawnWave();
+		}
+		else {
+			arenaSpawnTimer = ARENA_SPAWN_INTERVAL_MIN + (1 - Math.min(room.q / 100, 1)) * ARENA_SPAWN_INTERVAL_MAX;
 		}
 
 		if (stg.deathRoom == rid) {
@@ -149,7 +155,7 @@ class PlayState extends State {
 					}
 
 					spawnWave(room.q);
-					arenaTimer = ARENA_SPAWN_INTERVAL;
+					arenaTimer = arenaSpawnTimer;
 				}
 			}
 		}
@@ -159,7 +165,7 @@ class PlayState extends State {
 
 			if (arenaTimer < 0 || mobs.length < 2) {
 				spawnWave(room.q);
-				arenaTimer = ARENA_SPAWN_INTERVAL;
+				arenaTimer = arenaSpawnTimer;
 			}
 
 			if (mobs.length == 0 && room.q == 0) {
@@ -211,14 +217,14 @@ class PlayState extends State {
 	}
 
 	private function spawnWave(m:Int = -1) {
-		if (m == 0) {
+		if (m == 0 || mobs.length > 10) {
 			return;
 		}
 
 		var qty = 0;
 		for (e in room.enemySpawns) {
 			if (Line.distance(player.x, player.y, e.x, e.y) > ENEMY_SPAWN_DISTANCE) {
-				mobs.push(new Zombi(this, e.x, e.y));
+				mobs.push(new Zombi(this, e.x, e.y - 1));
 				room.q--;
 				qty++;
 				if (m > 0 && qty == m) {

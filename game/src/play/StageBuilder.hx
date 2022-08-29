@@ -161,14 +161,14 @@ class StageBuilder {
 		var rooms = new Array<Room>();
 
 		var startDoors = new Array<Door>();
-		rooms.push(makeRoom(startTpl, startDoors, length));
+		rooms.push(makeRoom(startTpl, startDoors, 1));
 		var roomId = rooms.length - 1;
 		rooms[0].e = null;
 
 		for (d in startTpl.d) {
 			var spwn = getDoorSpawnPos(d);
 
-			var next = createNextRoom(rooms, d.p, roomId, spwn, length - 1);
+			var next = createNextRoom(rooms, d.p, roomId, spwn, length - 1, length);
 			startDoors.push({
 				aabb: d.a,
 				targetRoom: next.r,
@@ -187,7 +187,7 @@ class StageBuilder {
 	}
 
 	@:native("cnr")
-	static function createNextRoom(rooms:Array<Room>, fromPos:Int, fromRoomId:Int, fromRoomSpwn:Vec2, len:Int) {
+	static function createNextRoom(rooms:Array<Room>, fromPos:Int, fromRoomId:Int, fromRoomSpwn:Vec2, len:Int, sl:Int) {
 		var toPos = invertDoorPos(fromPos);
 		var set = getDoorSet(toPos);
 		if (len == 0) {
@@ -201,7 +201,7 @@ class StageBuilder {
 		var tpl = ROOM[tgt.r];
 
 		var doors = new Array<Door>();
-		rooms.push(makeRoom(tpl, doors, rooms.length + len));
+		rooms.push(makeRoom(tpl, doors, sl - len));
 		var roomId = rooms.length - 1;
 
 		var pos = new Vec2();
@@ -217,7 +217,7 @@ class StageBuilder {
 			}
 
 			var spwn = getDoorSpawnPos(d);
-			var next = createNextRoom(rooms, d.p, roomId, spwn, len - 1);
+			var next = createNextRoom(rooms, d.p, roomId, spwn, len - 1, sl);
 			doors.push({
 				aabb: d.a,
 				targetRoom: next.r,
@@ -242,7 +242,7 @@ class StageBuilder {
 			triggers: t.t,
 			gates: t.g,
 			isArena: a,
-			q: s + Math.round(Math.random() * (s * 2)),
+			q: s * 2 + Math.round(Math.random() * (s * 2)),
 			e: t.d.length == 1 ? t.p[0] : null
 		};
 	}
