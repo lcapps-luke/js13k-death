@@ -62,7 +62,7 @@ class Zombi extends Mob {
 				attackBox.y = y - 48;
 
 				if (state.player.aabb.check(attackBox)) {
-					state.player.hit(null, x, y);
+					state.player.hit(x, facingDirection, x, y);
 				}
 			}
 
@@ -102,24 +102,22 @@ class Zombi extends Mob {
 		return state.player.aabb.w / 2 + aabb.w / 2 + 16;
 	}
 
-	override public function hit(shot:Shot, x:Float, y:Float) {
-		if (Math.abs(this.x - shot.x) < SPLAT_RANGE) {
+	override public function hit(fx:Float, d:Float, x:Float, y:Float) {
+		if (Math.abs(this.x - fx) < SPLAT_RANGE) {
 			alive = false;
 			for (i in 0...50) {
-				var gx = aabb.x + Math.random() * aabb.w;
-				var gy = aabb.y + Math.random() * aabb.h;
+				var gx = aabb.randomX();
+				var gy = aabb.randomY();
 
-				var g = new Gore(state, gx, gy, shot.direction * 300, -200 + Math.random() * 200);
-				state.particle.push(g);
+				state.particle.push(Particle.gore(state, gx, gy, d * 300, -200 + Math.random() * 200));
 			}
 		}
 		else {
 			onGround = false;
-			xSpeed = shot.direction * 200;
+			xSpeed = d * 200;
 			ySpeed = -100;
 
-			var g = new Gore(state, x, y, shot.direction * 300, -200 + Math.random() * 200);
-			state.particle.push(g);
+			state.particle.push(Particle.gore(state, x, y, d * 300, -200 + Math.random() * 200));
 		}
 	}
 }

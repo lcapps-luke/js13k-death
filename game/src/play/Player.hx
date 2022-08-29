@@ -153,17 +153,20 @@ class Player extends Mob {
 		renderLimb(facingDirection > 0 ? frontHand : backHand, facingDirection > 0 ? armF : armB, armMath, armIk);
 	}
 
-	override function hit(shot:Shot, x:Float, y:Float) {
+	override function hit(fx:Float, d:Float, x:Float, y:Float) {
 		if (invincibilityTimer < 0) {
 			invincibilityTimer = 0.5;
 
 			if (shield) {
 				shield = false;
-				// TODO shield destroy effect
+				state.particleBurst(Particle.shield, aabb, 50);
 			}
 			else {
 				// die
 				alive = false;
+				for (i in 0...50) {
+					state.particle.push(Particle.gore(state, aabb.randomX(), aabb.randomY(), d * 300, -200 + Math.random() * 200));
+				}
 			}
 
 			onGround = false;

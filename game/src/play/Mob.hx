@@ -157,10 +157,10 @@ abstract class Mob {
 		if (onGround && xSpeed != 0) {
 			walkCycle += (xSpeed * (0.035 / scale)) * s;
 			frontFoot.x = aabb.centerX() + Math.cos(walkCycle) * (32 * scale);
-			frontFoot.y = aabb.y + Math.min(aabb.h + Math.sin(walkCycle) * (8 * scale), aabb.h);
+			frontFoot.y = aabb.y + Math.min(aabb.h + Math.sin(walkCycle) * (11 * scale), aabb.h);
 
 			backFoot.x = aabb.centerX() + Math.cos(walkCycle + Math.PI) * (32 * scale);
-			backFoot.y = aabb.y + Math.min(aabb.h + Math.sin(walkCycle + Math.PI) * (8 * scale), aabb.h);
+			backFoot.y = aabb.y + Math.min(aabb.h + Math.sin(walkCycle + Math.PI) * (11 * scale), aabb.h);
 		}
 		else {
 			frontFoot.set(aabb.centerX(), aabb.y + aabb.h);
@@ -200,7 +200,7 @@ abstract class Mob {
 	}
 
 	@:native("h")
-	public function hit(shot:Shot, x:Float, y:Float):Void {}
+	public function hit(fx:Float, d:Float, x:Float, y:Float):Void {}
 }
 
 typedef Limb = {

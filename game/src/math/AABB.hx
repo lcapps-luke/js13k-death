@@ -7,6 +7,10 @@ class AABB {
 	public var h:Float;
 
 	public function new(x:Float = 0, y:Float = 0, w:Float = 0, h:Float = 0) {
+		set(x, y, w, h);
+	}
+
+	public function set(x:Float, y:Float, w:Float, h:Float) {
 		this.x = x;
 		this.y = y;
 		this.w = w;
@@ -47,5 +51,15 @@ class AABB {
 	private static function moveContact(l:Float, h:Float, ol:Float, oh:Float, m:Float):Float {
 		var d:Float = m > 0 ? ol - h : oh - l;
 		return m > 0 ? Math.min(Math.abs(d), Math.abs(m)) : -Math.min(Math.abs(d), Math.abs(m));
+	}
+
+	@:native("rx")
+	public function randomX() {
+		return x + Math.random() * w;
+	}
+
+	@:native("ry")
+	public function randomY() {
+		return y + Math.random() * h;
 	}
 }

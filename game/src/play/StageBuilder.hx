@@ -233,7 +233,7 @@ class StageBuilder {
 
 	@:native("mkr")
 	static function makeRoom(t:RoomTemplate, d:Array<Door>, s:Int):Room {
-		var a = t.t.length > 0 && Math.random() > 0.8;
+		var a = t.t.length > 0 && Math.random() > 0.5;
 
 		return {
 			walls: t.w,

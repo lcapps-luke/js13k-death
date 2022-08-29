@@ -36,7 +36,7 @@ class PlayState extends State {
 	public var shot(default, null) = new Shot();
 
 	@:native("pa")
-	public var particle(default, null):Array<Gore> = [];
+	public var particle(default, null):Array<Particle> = [];
 
 	@:native("a")
 	private var arenaTimer:Float = -1;
@@ -63,11 +63,11 @@ class PlayState extends State {
 			player.setState(ps);
 		}
 
-		wall = room.walls;
+		wall = room.walls.copy();
 		door = room.doors;
 
 		if (!room.isArena) {
-			spawnWave();
+			spawnWave(room.q, 0);
 		}
 		else {
 			arenaSpawnTimer = ARENA_SPAWN_INTERVAL_MIN + (1 - Math.min(room.q / 100, 1)) * ARENA_SPAWN_INTERVAL_MAX;
@@ -115,16 +115,8 @@ class PlayState extends State {
 			}
 		}
 
-		for (g in particle) {
-			g.update(s);
-			if (!g.alive) {
-				particle.remove(g);
-			}
-		}
-
 		for (m in mobs) {
 			m.update(s);
-
 			if (!m.alive) {
 				mobs.remove(m);
 			}
@@ -132,6 +124,13 @@ class PlayState extends State {
 
 		shot.update(s, this);
 		player.update(s);
+
+		for (g in particle) {
+			g.update(s);
+			if (!g.alive) {
+				particle.remove(g);
+			}
+		}
 
 		if (!player.alive) {
 			deathTimer -= s;
@@ -143,6 +142,7 @@ class PlayState extends State {
 
 		for (d in door) {
 			if (d.aabb.check(player.aabb)) {
+				this.room.q += mobs.length;
 				Main.setState(new PlayState(stage, d.targetRoom, d.playerSpawn, player.getState()));
 			}
 		}
@@ -154,7 +154,7 @@ class PlayState extends State {
 						wall.push(g);
 					}
 
-					spawnWave(room.q);
+					spawnWave(room.q, 50);
 					arenaTimer = arenaSpawnTimer;
 				}
 			}
@@ -164,7 +164,7 @@ class PlayState extends State {
 			arenaTimer -= s;
 
 			if (arenaTimer < 0 || mobs.length < 2) {
-				spawnWave(room.q);
+				spawnWave(room.q, 50);
 				arenaTimer = arenaSpawnTimer;
 			}
 
@@ -183,6 +183,8 @@ class PlayState extends State {
 	private inline function restartStage() {
 		this.stage.deathRoom = roomId;
 		this.stage.deathPoint.set(player.x, player.y);
+
+		this.room.q += mobs.length;
 
 		Main.setState(new PlayState(stage, stage.resRoom, stage.resPoint));
 	}
@@ -216,7 +218,7 @@ class PlayState extends State {
 		}
 	}
 
-	private function spawnWave(m:Int = -1) {
+	private function spawnWave(m:Int, p:Int) {
 		if (m == 0 || mobs.length > 10) {
 			return;
 		}
@@ -224,13 +226,25 @@ class PlayState extends State {
 		var qty = 0;
 		for (e in room.enemySpawns) {
 			if (Line.distance(player.x, player.y, e.x, e.y) > ENEMY_SPAWN_DISTANCE) {
-				mobs.push(new Zombi(this, e.x, e.y - 1));
+				var z = new Zombi(this, e.x, e.y - 1);
+				mobs.push(z);
+				particleBurst(Particle.spawn, z.aabb, p);
+
 				room.q--;
 				qty++;
 				if (m > 0 && qty == m) {
 					return;
 				}
 			}
+		}
+	}
+
+	public function particleBurst(pf:PlayState->Float->Float->Float->Float->Particle, a:AABB, q:Int) {
+		for (i in 0...q) {
+			var sp = 200 + Math.random() * 100;
+			var dir = Math.random() * (Math.PI * 2);
+			var p = pf(this, a.randomX(), a.randomY(), Math.cos(dir) * sp, Math.cos(dir) * sp);
+			particle.push(p);
 		}
 	}
 }

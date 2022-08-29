@@ -65,7 +65,7 @@ class Shot {
 				if (mobHit.h != null && mobHit.h.distanceTo(x, y) < hit.distanceTo(x, y)) {
 					hit.x = mobHit.h.x;
 					hit.y = mobHit.h.y;
-					mobHit.m.hit(this, hit.x, hit.y);
+					mobHit.m.hit(x, direction, hit.x, hit.y);
 				}
 
 				Main.context.beginPath();
