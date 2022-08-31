@@ -38,14 +38,23 @@ abstract class Mob {
 	@:native("st")
 	private var state:PlayState;
 
+	@:native("wcy")
 	private var walkCycle:Float = 0;
+	@:native("wfr")
 	private var frontFoot = new Vec2();
+	@:native("wbk")
 	private var backFoot = new Vec2();
+	@:native("wfh")
 	private var frontHand = new Vec2();
+	@:native("wbh")
 	private var backHand = new Vec2();
+	@:native("wlm")
 	private var legMath = new CircleIntersect();
+	@:native("wam")
 	private var armMath = new CircleIntersect();
+	@:native("lik")
 	private var legIk = new Vec2();
+	@:native("aak")
 	private var armIk = new Vec2();
 
 	private var bodySpr:Sprite;
@@ -54,6 +63,7 @@ abstract class Mob {
 	private var armF:Limb;
 	private var armB:Limb;
 
+	@:native("scl")
 	private var scale:Float;
 
 	public function new(state:PlayState, x:Float, y:Float, img:ImageElement, s:Float = 1) {

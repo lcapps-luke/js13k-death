@@ -30,6 +30,7 @@ class Player extends Mob {
 	private var shield:Bool = true;
 
 	private var gun:Sprite;
+	@:native("rll")
 	private var reloadLine:Line = new Line();
 
 	public function new(state:PlayState, x:Float, y:Float) {

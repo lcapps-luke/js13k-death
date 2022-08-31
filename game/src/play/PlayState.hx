@@ -18,6 +18,7 @@ class PlayState extends State {
 
 	@:native("r")
 	private var room:Room;
+	@:native("rid")
 	private var roomId:Int;
 
 	@:native("p")
@@ -200,11 +201,11 @@ class PlayState extends State {
 		var stxt = 'Stage: ${stage.n}';
 		Main.context.strokeText(stxt, 10, 60);
 		Main.context.fillText(stxt, 10, 60);
-		var s = "";
+
+		var s = "Ammo: ";
 		for (i in 0...8) {
 			s += player.ammo > i ? "▮" : "▯";
 		}
-		s = 'Ammo: $s';
 
 		var sw = Main.context.measureText(s).width;
 

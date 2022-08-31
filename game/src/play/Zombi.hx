@@ -14,7 +14,7 @@ class Zombi extends Mob {
 	@:native("at")
 	private var attackTimer:Float = 0;
 	@:native("ab")
-	private var attackBox:AABB = new AABB();
+	private var attackBox:AABB;
 	@:native("al")
 	private var attackLine:Line = new Line();
 	@:native("aw")
@@ -23,11 +23,9 @@ class Zombi extends Mob {
 	private var wsp:Float;
 
 	public function new(s:PlayState, x:Float, y:Float) {
-		var sc = 0.8 + Math.random() * 0.2;
-		super(s, x, y, Images.zombi, sc);
+		super(s, x, y, Images.zombi, 0.8 + Math.random() * 0.2);
 		wsp = 100 + Math.random() * 100;
-		attackBox.w = 48 * sc;
-		attackBox.h = 16 * sc;
+		attackBox = new AABB(0, 0, 48 * scale, 16 * scale);
 	}
 
 	override function update(s:Float) {
