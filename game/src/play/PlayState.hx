@@ -103,6 +103,7 @@ class PlayState extends State {
 				stage.resPoint = stage.deathPoint;
 				stage.deathRoom = -1;
 				resPoint = null;
+				Sound.recoverSpawn();
 			}
 		}
 
@@ -112,6 +113,7 @@ class PlayState extends State {
 			if (endPoint.check(player.aabb)) {
 				// next stage
 				Main.setState(new NextState(stage.n));
+				Sound.stageEnd();
 			}
 		}
 

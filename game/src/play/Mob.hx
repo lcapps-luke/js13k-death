@@ -97,7 +97,8 @@ abstract class Mob {
 
 		return {
 			u: u,
-			l: l
+			l: l,
+			g: 1
 		};
 	}
 
@@ -113,7 +114,8 @@ abstract class Mob {
 
 		return {
 			u: u,
-			l: l
+			l: l,
+			g: 1
 		};
 	}
 
@@ -161,10 +163,16 @@ abstract class Mob {
 
 			backFoot.x = aabb.centerX() + Math.cos(walkCycle + Math.PI) * (32 * scale);
 			backFoot.y = aabb.y + Math.min(aabb.h + Math.sin(walkCycle + Math.PI) * (11 * scale), aabb.h);
+
+			setFootGround(legF, frontFoot.y >= aabb.y + aabb.h ? 1 : 0);
+			setFootGround(legB, backFoot.y >= aabb.y + aabb.h ? 1 : 0);
 		}
 		else {
 			frontFoot.set(aabb.centerX(), aabb.y + aabb.h);
 			backFoot.set(aabb.centerX(), aabb.y + aabb.h);
+
+			setFootGround(legF, onGround ? 1 : 0);
+			setFootGround(legB, onGround ? 1 : 0);
 		}
 		legMath.ca.p.set(aabb.centerX(), aabb.y + aabb.h * 0.53);
 		legIk.set(aabb.centerX() + (200 * scale * facingDirection), aabb.centerY());
@@ -199,6 +207,11 @@ abstract class Mob {
 		 */
 	}
 
+	@:native("sfg")
+	private function setFootGround(l:Limb, g:Int) {
+		l.g = g;
+	}
+
 	@:native("h")
 	public function hit(fx:Float, d:Float, x:Float, y:Float):Void {}
 }
@@ -206,4 +219,5 @@ abstract class Mob {
 typedef Limb = {
 	var u:Sprite;
 	var l:Sprite;
+	var g:Int;
 }

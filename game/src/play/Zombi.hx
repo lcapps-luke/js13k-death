@@ -14,7 +14,7 @@ class Zombi extends Mob {
 	@:native("at")
 	private var attackTimer:Float = 0;
 	@:native("ab")
-	private var attackBox:AABB = new AABB(0, 0, 64, 32);
+	private var attackBox:AABB = new AABB();
 	@:native("al")
 	private var attackLine:Line = new Line();
 	@:native("aw")
@@ -23,8 +23,11 @@ class Zombi extends Mob {
 	private var wsp:Float;
 
 	public function new(s:PlayState, x:Float, y:Float) {
-		super(s, x, y, Images.zombi, 0.8 + Math.random() * 0.2);
+		var sc = 0.8 + Math.random() * 0.2;
+		super(s, x, y, Images.zombi, sc);
 		wsp = 100 + Math.random() * 100;
+		attackBox.w = 48 * sc;
+		attackBox.h = 16 * sc;
 	}
 
 	override function update(s:Float) {
@@ -59,7 +62,7 @@ class Zombi extends Mob {
 
 			if (attackTimer < 0) {
 				attackBox.x = facingDirection > 0 ? x : x - attackBox.w;
-				attackBox.y = y - 48;
+				attackBox.y = aabb.y + aabb.h * 0.15;
 
 				if (state.player.aabb.check(attackBox)) {
 					state.player.hit(x, facingDirection, x, y);
@@ -103,6 +106,7 @@ class Zombi extends Mob {
 	}
 
 	override public function hit(fx:Float, d:Float, x:Float, y:Float) {
+		Sound.zombiHit();
 		if (Math.abs(this.x - fx) < SPLAT_RANGE) {
 			alive = false;
 			for (i in 0...50) {

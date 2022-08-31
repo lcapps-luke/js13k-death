@@ -1,6 +1,7 @@
 package play;
 
 import math.Line;
+import play.Mob.Limb;
 import resource.Images;
 import resource.Sprite;
 
@@ -83,6 +84,7 @@ class Player extends Mob {
 		if (Ctrl.shoot && canShoot && ammo > 0) {
 			canShoot = false;
 			state.shot.fire(x + facingDirection * 20, y - aabb.h * 0.77, facingDirection);
+			Sound.shoot();
 			ammo--;
 			reloadTimer = 0;
 		}
@@ -99,6 +101,7 @@ class Player extends Mob {
 			reloadTimer -= s;
 			if (reloadTimer < 0) {
 				ammo++;
+				Sound.reload();
 				if (ammo != MAX_AMMO) {
 					reloadTimer = RELOAD_TIME;
 				}
@@ -156,6 +159,7 @@ class Player extends Mob {
 	override function hit(fx:Float, d:Float, x:Float, y:Float) {
 		if (invincibilityTimer < 0) {
 			invincibilityTimer = 0.5;
+			Sound.playerHit();
 
 			if (shield) {
 				shield = false;
@@ -191,6 +195,13 @@ class Player extends Mob {
 		this.shield = s.s;
 		this.ySpeed = s.ys;
 		this.xSpeed = s.xs;
+	}
+
+	override function setFootGround(l:Limb, g:Int) {
+		if (l.g == 0 && g == 1) {
+			Sound.step();
+		}
+		super.setFootGround(l, g);
 	}
 }
 
