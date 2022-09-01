@@ -180,6 +180,7 @@ class PlayState extends State {
 			}
 		}
 
+		Tutorial.update(this);
 		drawHud();
 	}
 
