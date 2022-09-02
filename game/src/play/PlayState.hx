@@ -185,12 +185,17 @@ class PlayState extends State {
 	}
 
 	private inline function restartStage() {
+		if (stage.deathRoom > -1) {
+			Main.setState(new GameOver(stage.n));
+			return;
+		}
+
 		this.stage.deathRoom = roomId;
 		this.stage.deathPoint.set(player.x, player.y);
 
 		this.room.q += mobs.length;
 
-		Main.setState(new PlayState(stage, stage.resRoom, stage.resPoint));
+		Main.setState(new PlayState(stage, stage.resRoom, stage.resPoint, player.getState()));
 	}
 
 	private inline function drawHud() {

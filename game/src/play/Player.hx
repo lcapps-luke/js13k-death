@@ -207,8 +207,8 @@ class Player extends Mob {
 }
 
 typedef PlayerState = {
-	var a:Int;
+	var a:Int; // ammo
 	var xs:Float;
 	var ys:Float;
-	var s:Bool;
+	var s:Bool; // shield
 }
