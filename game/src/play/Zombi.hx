@@ -35,21 +35,29 @@ class Zombi extends Mob {
 
 		super.update(s);
 
-		if (onGround && attackTimer <= 0) {
-			xSpeed = state.player.x > x ? wsp : -wsp;
-			if (Math.abs(x - state.player.x) < getAttackDistance()) {
-				xSpeed = 0;
+		attackBox.x = facingDirection > 0 ? x : x - attackBox.w;
+		attackBox.y = aabb.y + aabb.h * 0.15;
 
-				attackTimer = ATTACK_TIMER;
+		if (onGround && attackTimer <= 0) {
+			if (state.player.y - y > 64) {
+				// above player, move towards edge of floor that is closest to player x
+				xSpeed = Math.abs(floor.x - state.player.x) > Math.abs((floor.x + floor.w) - state.player.x) ? wsp : -wsp;
 			}
 			else {
-				facingDirection = xSpeed > 0 ? 1 : -1;
+				xSpeed = state.player.x > x ? wsp : -wsp;
 			}
+
+			facingDirection = xSpeed > 0 ? 1 : -1;
 
 			if (touchingWall) {
 				ySpeed = -JUMP_SPEED;
 				onGround = false;
 			}
+		}
+
+		if (attackTimer <= 0 && attackBox.check(state.player.aabb)) {
+			xSpeed = 0;
+			attackTimer = ATTACK_TIMER;
 		}
 
 		armMath.ca.p.set(aabb.centerX(), aabb.y + aabb.h * 0.22);
@@ -59,9 +67,6 @@ class Zombi extends Mob {
 			attackTimer -= s;
 
 			if (attackTimer < 0) {
-				attackBox.x = facingDirection > 0 ? x : x - attackBox.w;
-				attackBox.y = aabb.y + aabb.h * 0.15;
-
 				if (state.player.aabb.check(attackBox)) {
 					state.player.hit(x, facingDirection, x, y);
 				}
