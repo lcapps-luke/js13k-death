@@ -66,6 +66,8 @@ abstract class Mob {
 	@:native("scl")
 	private var scale:Float;
 
+	private var floor:AABB = null;
+
 	public function new(state:PlayState, x:Float, y:Float, img:ImageElement, s:Float = 1) {
 		this.x = x;
 		this.y = y;
@@ -134,34 +136,22 @@ abstract class Mob {
 		touchingWall = false;
 		ySpeed += gravity * s;
 
-		var mx = xSpeed * s;
-		var my = ySpeed * s;
+		var m = new Vec2(xSpeed * s, ySpeed * s);
 
 		if (ySpeed > 20) {
 			onGround = false;
 		}
 		for (p in state.wall) {
-			if (p.check(aabb, 0, my)) {
-				if (ySpeed > 0) {
-					onGround = true;
-				}
-
-				ySpeed = 0;
-				my = aabb.moveContactY(p, my);
-				my = my > 0 ? my - 0.2 : my + 0.2;
-			}
-
-			if (p.check(aabb, mx, 0)) {
-				mx = aabb.moveContactX(p, mx);
-				if (mx != 0) {
-					mx = mx > 0 ? mx - 0.2 : mx + 0.2;
-				}
-				touchingWall = true;
+			checkCollision(p, m);
+		}
+		for (p in state.mobs) {
+			if (p != this) {
+				checkCollision(p.aabb, m);
 			}
 		}
 
-		x += mx;
-		y += my;
+		x += m.x;
+		y += m.y;
 		aabb.x = x - aabb.w / 2;
 		aabb.y = y - aabb.h;
 
@@ -188,6 +178,28 @@ abstract class Mob {
 		legIk.set(aabb.centerX() + (200 * scale * facingDirection), aabb.centerY());
 	}
 
+	@:native("cc")
+	private function checkCollision(p:AABB, m:Vec2) {
+		if (p.check(aabb, 0, m.y)) {
+			if (ySpeed > 0) {
+				onGround = true;
+				floor = p;
+			}
+
+			ySpeed = 0;
+			m.y = aabb.moveContactY(p, m.y);
+			m.y = m.y > 0 ? m.y - 0.2 : m.y + 0.2;
+		}
+
+		if (p.check(aabb, m.x, 0)) {
+			m.x = aabb.moveContactX(p, m.x);
+			if (m.x != 0) {
+				m.x = m.x > 0 ? m.x - 0.2 : m.x + 0.2;
+			}
+			touchingWall = true;
+		}
+	}
+
 	@:native("rl")
 	private function renderLimb(f:Vec2, l:Limb, m:CircleIntersect, i:Vec2) {
 		m.cb.p.copy(f);
@@ -204,17 +216,6 @@ abstract class Mob {
 		l.l.p.copy(jPos);
 		l.l.a = m.cb.p.dirTo(jPos) + Math.PI * 0.5;
 		l.l.draw();
-
-		/*
-			Main.context.strokeStyle = "#00F";
-			Main.context.lineWidth = 1;
-			Main.context.beginPath();
-			Main.context.ellipse(m.ca.p.x, m.ca.p.y, m.ca.r, m.ca.r, 0, 0, Math.PI * 2);
-			Main.context.stroke();
-			Main.context.beginPath();
-			Main.context.ellipse(m.cb.p.x, m.cb.p.y, m.cb.r, m.cb.r, 0, 0, Math.PI * 2);
-			Main.context.stroke();
-		 */
 	}
 
 	@:native("sfg")
