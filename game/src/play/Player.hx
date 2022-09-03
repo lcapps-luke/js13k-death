@@ -113,9 +113,6 @@ class Player extends Mob {
 			reloadTimer = -1;
 		}
 
-		// Main.context.fillStyle = "#00F";
-		// Main.context.fillRect(aabb.x, aabb.y, aabb.w, aabb.h);
-
 		// calculate limb targets
 		armMath.ca.p.set(aabb.centerX(), aabb.y + aabb.h * 0.22);
 		armIk.set(aabb.centerX() + (facingDirection * -10), aabb.y + aabb.h);

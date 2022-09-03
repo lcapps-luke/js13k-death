@@ -149,6 +149,14 @@ class PlayState extends State {
 		shot.update(s, this);
 		player.update(s);
 
+		if (stage.resRoom == roomId) {
+			var lg = Main.context.createLinearGradient(0, stage.resPoint.y - 64, 0, stage.resPoint.y);
+			lg.addColorStop(0, "#0F00");
+			lg.addColorStop(1, "#0F0");
+			Main.context.fillStyle = lg;
+			Main.context.fillRect(stage.resPoint.x - 16, stage.resPoint.y - 64, 32, 64);
+		}
+
 		for (g in particle) {
 			g.update(s);
 			if (!g.alive) {
