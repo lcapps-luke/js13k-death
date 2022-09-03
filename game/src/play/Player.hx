@@ -204,6 +204,11 @@ class Player extends Mob {
 		}
 		super.setFootGround(l, g);
 	}
+
+	@:native("rsh")
+	public function recoverShield() {
+		this.shield = true;
+	}
 }
 
 typedef PlayerState = {

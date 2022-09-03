@@ -99,10 +99,11 @@ class PlayState extends State {
 			Main.context.fillRect(resPoint.x, resPoint.y, resPoint.w, resPoint.h);
 			Main.context.globalAlpha = 1;
 
-			if (arenaTimer <= 0 && resPoint.check(player.aabb)) {
+			if (arenaTimer <= 0 && player.alive && resPoint.check(player.aabb)) {
 				stage.resRoom = stage.deathRoom;
 				stage.resPoint = stage.deathPoint;
 				stage.deathRoom = -1;
+				player.recoverShield();
 				resPoint = null;
 				Sound.recoverSpawn();
 			}
@@ -191,7 +192,7 @@ class PlayState extends State {
 		}
 
 		this.stage.deathRoom = roomId;
-		this.stage.deathPoint.set(player.x, player.y);
+		this.stage.deathPoint = new Vec2(player.x, player.y);
 
 		this.room.q += mobs.length;
 
