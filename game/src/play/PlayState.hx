@@ -256,4 +256,17 @@ class PlayState extends State {
 			particle.push(p);
 		}
 	}
+
+	public function spaceFree(z:AABB) {
+		if (z.x < 0 || z.x + z.w > 1920) {
+			return false;
+		}
+
+		for (w in wall) {
+			if (w.check(z)) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

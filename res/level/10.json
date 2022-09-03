@@ -55,7 +55,7 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":1336,
+                 "width":1488,
                  "x":512,
                  "y":400
                 }, 
@@ -82,15 +82,15 @@
                  "y":600
                 }, 
                 {
-                 "height":400,
+                 "height":368,
                  "id":33,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":144,
+                 "width":72,
                  "x":1848,
-                 "y":400
+                 "y":432
                 }],
          "opacity":1,
          "type":"objectgroup",

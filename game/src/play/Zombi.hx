@@ -21,11 +21,13 @@ class Zombi extends Mob {
 	private var armWobble:Float = 0;
 
 	private var wsp:Float;
+	private var navZone:AABB;
 
 	public function new(s:PlayState, x:Float, y:Float) {
 		super(s, x, y, Images.zombi, 0.8 + Math.random() * 0.2);
 		wsp = 100 + Math.random() * 100;
 		attackBox = new AABB(0, 0, 48 * scale, 16 * scale);
+		navZone = new AABB(0, 0, 20 * scale * 2, 128 * scale);
 	}
 
 	override function update(s:Float) {
@@ -41,10 +43,13 @@ class Zombi extends Mob {
 		if (onGround && attackTimer <= 0) {
 			if (state.player.y - y > 64) {
 				// above player, move towards edge of floor that is closest to player x
-				xSpeed = Math.abs(floor.x - state.player.x) > Math.abs((floor.x + floor.w) - state.player.x) ? wsp : -wsp;
+				xSpeed = towardsNearestPlatformEdge();
+			}
+			else if (Math.abs(x - state.player.x) > 5) {
+				xSpeed = state.player.x > x ? wsp : -wsp;
 			}
 			else {
-				xSpeed = state.player.x > x ? wsp : -wsp;
+				xSpeed = 0;
 			}
 
 			facingDirection = xSpeed > 0 ? 1 : -1;
@@ -102,6 +107,23 @@ class Zombi extends Mob {
 
 		renderLimb(frontFoot, legF, legMath, legIk);
 		renderLimb(frontHand, armF, armMath, armIk);
+	}
+
+	private inline function towardsNearestPlatformEdge():Float {
+		navZone.y = floor.y - navZone.h - 1;
+
+		navZone.x = floor.x - navZone.w / 2;
+		var af = state.spaceFree(navZone);
+
+		navZone.x = floor.x + floor.w - navZone.w / 2;
+		var bf = state.spaceFree(navZone);
+
+		// both or neither free, move to closest
+		if (af == bf) {
+			return Math.abs(floor.x - state.player.x) > Math.abs((floor.x + floor.w) - state.player.x) ? wsp : -wsp;
+		}
+
+		return af ? -wsp : wsp;
 	}
 
 	private inline function getAttackDistance() {
