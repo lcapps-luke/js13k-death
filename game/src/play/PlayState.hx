@@ -93,7 +93,7 @@ class PlayState extends State {
 		}
 
 		if (room.e != null) {
-			endPoint = new AABB(room.e.x - 16, room.e.y - 64, 64, 64);
+			endPoint = new AABB(room.e.x - 36, room.e.y - 153, 72, 153);
 		}
 	}
 
@@ -130,8 +130,7 @@ class PlayState extends State {
 		}
 
 		if (endPoint != null) {
-			Main.context.fillStyle = "#FF0";
-			Main.context.fillRect(endPoint.x, endPoint.y, endPoint.w, endPoint.h);
+			Main.context.drawImage(Images.door, endPoint.x, endPoint.y, endPoint.w, endPoint.h);
 			if (endPoint.check(player.aabb)) {
 				// next stage
 				Main.setState(new NextState(stage.n));

@@ -14,6 +14,9 @@ class Images {
 	@:native("h")
 	public static var phoenix:ImageElement;
 
+	@:native("o")
+	public static var door:ImageElement;
+
 	@:native("q")
 	private static var qty = 0;
 
@@ -27,6 +30,7 @@ class Images {
 		player = loadImage(ResourceBuilder.buildImage("player.svg"));
 		zombi = loadImage(ResourceBuilder.buildImage("zombi.svg"));
 		phoenix = loadImage(ResourceBuilder.buildImage("phoenix.svg"));
+		door = loadImage(ResourceBuilder.buildImage("door.svg"));
 	}
 
 	@:native("i")
