@@ -64,6 +64,15 @@ class PlayState extends State {
 			player.setState(ps);
 		}
 
+		var rc = 0;
+		for (d in room.doors) {
+			if (d.aabb.y > 0 && d.aabb.y < 1080) {
+				roomMidPoint += d.aabb.y + d.aabb.h;
+				rc++;
+			}
+		}
+		roomMidPoint = rc > 0 ? Math.round(roomMidPoint / rc) : 1080 / 2;
+
 		wall = room.walls.copy();
 		door = room.doors;
 
@@ -86,8 +95,12 @@ class PlayState extends State {
 	override function update(s:Float) {
 		super.update(s);
 
-		Main.context.fillStyle = "#aaa";
-		Main.context.fillRect(0, 0, 1920, 1080);
+		Main.context.fillStyle = "#918299";
+		Main.context.fillRect(0, 0, 1920, roomMidPoint);
+		Main.context.fillStyle = "#727272";
+		Main.context.fillRect(0, roomMidPoint, 1920, 1080 - roomMidPoint);
+		Main.context.fillStyle = "#99776B";
+		Main.context.fillRect(0, roomMidPoint - 32, 1920, 32);
 
 		Main.context.fillStyle = "#000";
 		for (w in wall) {
