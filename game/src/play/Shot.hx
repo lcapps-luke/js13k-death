@@ -8,7 +8,7 @@ import math.Vec2;
 class Shot {
 	private static inline var SHOT_QTY = 5;
 
-	public var aabb(default, null):AABB = new AABB(0, 0, 600, 32);
+	public var aabb(default, null):AABB = new AABB(0, 0, 1920, 128);
 
 	@:native("a")
 	public var active(default, null):Bool = false;

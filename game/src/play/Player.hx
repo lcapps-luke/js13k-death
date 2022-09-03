@@ -84,7 +84,7 @@ class Player extends Mob {
 
 		if (Ctrl.shoot && canShoot && ammo > 0) {
 			canShoot = false;
-			state.shot.fire(x + facingDirection * 20, y - aabb.h * 0.77, facingDirection);
+			state.shot.fire(x + facingDirection * 22, y - aabb.h * 0.78, facingDirection);
 			Sound.shoot();
 			ammo--;
 			reloadTimer = 0;
@@ -114,7 +114,7 @@ class Player extends Mob {
 		}
 
 		// calculate limb targets
-		armMath.ca.p.set(aabb.centerX(), aabb.y + aabb.h * 0.22);
+		armMath.ca.p.set(aabb.centerX() - (facingDirection * aabb.w * 0.1), aabb.y + aabb.h * 0.24);
 		armIk.set(aabb.centerX() + (facingDirection * -10), aabb.y + aabb.h);
 
 		if (reloadTimer > 0) {
@@ -183,7 +183,8 @@ class Player extends Mob {
 			a: ammo,
 			s: shield,
 			ys: ySpeed,
-			xs: xSpeed
+			xs: xSpeed,
+			t: reloadTimer
 		}
 	}
 
@@ -193,6 +194,7 @@ class Player extends Mob {
 		this.shield = s.s;
 		this.ySpeed = s.ys;
 		this.xSpeed = s.xs;
+		this.reloadTimer = s.t;
 	}
 
 	override function setFootGround(l:Limb, g:Int) {
@@ -213,4 +215,5 @@ typedef PlayerState = {
 	var xs:Float;
 	var ys:Float;
 	var s:Bool; // shield
+	var t:Float; // reload timer
 }

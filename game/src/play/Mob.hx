@@ -121,7 +121,7 @@ abstract class Mob {
 		u.c.set(sc, sc);
 
 		var l = new Sprite(i, 50, 65, 10, 51);
-		l.o.set(12, 4); // 43 long
+		l.o.set(5, 3); // 43 long
 		l.c.set(sc, sc);
 
 		return {
@@ -158,10 +158,10 @@ abstract class Mob {
 		// calculate walk cycle
 		if (onGround && xSpeed != 0) {
 			walkCycle += (xSpeed * (0.035 / scale)) * s;
-			frontFoot.x = aabb.centerX() + Math.cos(walkCycle) * (32 * scale);
+			frontFoot.x = aabb.centerX() + Math.cos(walkCycle) * (30 * scale);
 			frontFoot.y = aabb.y + Math.min(aabb.h + Math.sin(walkCycle) * (11 * scale), aabb.h);
 
-			backFoot.x = aabb.centerX() + Math.cos(walkCycle + Math.PI) * (32 * scale);
+			backFoot.x = aabb.centerX() + Math.cos(walkCycle + Math.PI) * (30 * scale);
 			backFoot.y = aabb.y + Math.min(aabb.h + Math.sin(walkCycle + Math.PI) * (11 * scale), aabb.h);
 
 			setFootGround(legF, frontFoot.y >= aabb.y + aabb.h ? 1 : 0);
@@ -174,7 +174,7 @@ abstract class Mob {
 			setFootGround(legF, onGround ? 1 : 0);
 			setFootGround(legB, onGround ? 1 : 0);
 		}
-		legMath.ca.p.set(aabb.centerX(), aabb.y + aabb.h * 0.53);
+		legMath.ca.p.set(aabb.centerX(), aabb.y + aabb.h * 0.52);
 		legIk.set(aabb.centerX() + (200 * scale * facingDirection), aabb.centerY());
 	}
 
