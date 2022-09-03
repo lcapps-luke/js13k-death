@@ -3,14 +3,6 @@ package play;
 import math.AABB;
 
 class NextState extends AbstractMenuState {
-	@:native("n")
-	private static var NEXT_TEXT = "Next Stage";
-
-	private var t:String;
-
-	@:native("a")
-	private var n:AABB = new AABB(0, 0, 0, 50);
-
 	private var l:Int;
 
 	public function new(l:Int) {

@@ -7,7 +7,7 @@ import play.StageBuilder;
 import resource.Images;
 
 class Main {
-	private static inline var MAX_DELTA = 1000 / 12;
+	private static inline var MAX_DELTA = 83;
 
 	@:native("e")
 	public static var canvas(default, null):CanvasElement;

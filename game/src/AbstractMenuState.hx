@@ -5,10 +5,16 @@ import math.AABB;
 abstract class AbstractMenuState extends State {
 	private static inline var OPT_FROM:Float = 1080 / 2;
 
+	@:native("t")
 	private var title:String;
+
+	@:native("b")
 	private var subTitle:String;
+
+	@:native("o")
 	private var optGap:Float;
 
+	@:native("z")
 	private var aabb = new AABB(0, 0, 0, 50);
 
 	public function new(title:String, optQty:Int, subTitle:String = null) {
@@ -35,6 +41,7 @@ abstract class AbstractMenuState extends State {
 		}
 	}
 
+	@:native("d")
 	private function drawOption(t:String, y:Float) {
 		aabb.w = Main.context.measureText(t).width;
 		aabb.x = 1920 / 2 - aabb.w / 2;

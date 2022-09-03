@@ -21,6 +21,7 @@ class Zombi extends Mob {
 	private var armWobble:Float = 0;
 
 	private var wsp:Float;
+	@:native("navz")
 	private var navZone:AABB;
 
 	public function new(s:PlayState, x:Float, y:Float) {
