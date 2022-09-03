@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="10.609765mm"
+   height="11.432817mm"
+   viewBox="0 0 10.609765 11.432817"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   sodipodi:docname="phoenix.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:lockguides="false"
+     inkscape:zoom="8"
+     inkscape:cx="14.6875"
+     inkscape:cy="17.4375"
+     inkscape:window-width="1920"
+     inkscape:window-height="1018"
+     inkscape:window-x="-6"
+     inkscape:window-y="-6"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3017"
+       empspacing="5"
+       originx="-44.965951"
+       originy="-74.051425" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient5919"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#ff8000;stop-opacity:1;"
+         offset="0"
+         id="stop5917" />
+    </linearGradient>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-44.965951,-74.051426)">
+    <path
+       style="fill:#ff8000;fill-opacity:1;stroke:none;stroke-width:0.0264323px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 55.5625,74.083333 c -1.322917,1.322917 -2.645833,3.175 -4.497917,3.175 V 76.2 l 1.058334,-0.79375 -3.175,-0.529167 L 49.477083,76.2 v 1.058333 c -1.852083,0 -3.175,-1.852083 -4.497916,-3.175 0,6.614584 2.116666,6.879167 4.497916,7.9375 0,2.38125 0.264584,2.645834 0.79375,3.439584 0.529167,-0.79375 0.79375,-1.058334 0.79375,-3.439584 2.3973,-1.058333 4.497917,-1.322916 4.497917,-7.9375 z"
+       id="path2919"
+       sodipodi:nodetypes="cccccccccccc" />
+  </g>
+</svg>

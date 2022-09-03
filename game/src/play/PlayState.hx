@@ -1,5 +1,6 @@
 package play;
 
+import js.html.Image;
 import math.AABB;
 import math.Line;
 import math.Vec2;
@@ -7,6 +8,7 @@ import play.Player.PlayerState;
 import play.StageBuilder.Door;
 import play.StageBuilder.Room;
 import play.StageBuilder.Stage;
+import resource.Images;
 
 class PlayState extends State {
 	private static inline var ENEMY_SPAWN_DISTANCE:Float = 300;
@@ -53,6 +55,9 @@ class PlayState extends State {
 	@:native("ep")
 	private var endPoint:AABB = null;
 
+	@:native("rmp")
+	private var roomMidPoint:Float = 0;
+
 	public function new(stg:Stage, rid:Int, p:Vec2, ps:PlayerState = null) {
 		super();
 		this.stage = stg;
@@ -84,11 +89,11 @@ class PlayState extends State {
 		}
 
 		if (stg.deathRoom == rid) {
-			resPoint = new AABB(stg.deathPoint.x - 16, stg.deathPoint.y - 32, 32, 32);
+			resPoint = new AABB(stg.deathPoint.x - 16, stg.deathPoint.y - 64, 32, 64);
 		}
 
 		if (room.e != null) {
-			endPoint = new AABB(room.e.x - 16, room.e.y - 32, 32, 32);
+			endPoint = new AABB(room.e.x - 16, room.e.y - 64, 64, 64);
 		}
 	}
 
@@ -108,11 +113,13 @@ class PlayState extends State {
 		}
 
 		if (resPoint != null) {
-			Main.context.fillStyle = (arenaTimer > 0 || mobs.length > 0) ? "#00F8" : "#00F";
-			Main.context.fillRect(resPoint.x, resPoint.y, resPoint.w, resPoint.h);
+			var cc = !(arenaTimer > 0 || mobs.length > 0);
+
+			Main.context.globalAlpha = cc ? 1 : 0.5;
+			Main.context.drawImage(Images.phoenix, resPoint.x, resPoint.y, resPoint.w, resPoint.h);
 			Main.context.globalAlpha = 1;
 
-			if (arenaTimer <= 0 && player.alive && resPoint.check(player.aabb)) {
+			if (cc && player.alive && resPoint.check(player.aabb)) {
 				stage.resRoom = stage.deathRoom;
 				stage.resPoint = stage.deathPoint;
 				stage.deathRoom = -1;
@@ -154,6 +161,10 @@ class PlayState extends State {
 
 			if (deathTimer < 0) {
 				restartStage();
+			}
+
+			if (resPoint == null) {
+				resPoint = new AABB(player.x - 16, player.y - 64, 32, 64);
 			}
 		}
 
@@ -236,8 +247,12 @@ class PlayState extends State {
 			s = Std.string(mobs.length + room.q);
 			sw = Main.context.measureText(s).width;
 
-			Main.context.strokeText(s, 1910 / 2 - sw / 2, 60);
-			Main.context.fillText(s, 1910 / 2 - sw / 2, 60);
+			Main.context.strokeText(s, 1910 / 2 - sw / 2, 135);
+			Main.context.fillText(s, 1910 / 2 - sw / 2, 135);
+		}
+
+		if (stage.deathRoom == -1) {
+			Main.context.drawImage(Images.phoenix, 1920 / 2 - 25, 25, 50, 50);
 		}
 	}
 

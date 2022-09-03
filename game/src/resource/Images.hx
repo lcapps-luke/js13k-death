@@ -11,6 +11,9 @@ class Images {
 	@:native("z")
 	public static var zombi:ImageElement;
 
+	@:native("h")
+	public static var phoenix:ImageElement;
+
 	@:native("q")
 	private static var qty = 0;
 
@@ -23,6 +26,7 @@ class Images {
 
 		player = loadImage(ResourceBuilder.buildImage("player.svg"));
 		zombi = loadImage(ResourceBuilder.buildImage("zombi.svg"));
+		phoenix = loadImage(ResourceBuilder.buildImage("phoenix.svg"));
 	}
 
 	@:native("i")
