@@ -57,4 +57,9 @@ class Vec2 {
 	public function dirTo(o:Vec2) {
 		return Math.atan2(o.y - y, o.x - x);
 	}
+
+	@:native("mrx")
+	public function mirrorX(m:Float) {
+		x = m + m - x;
+	}
 }

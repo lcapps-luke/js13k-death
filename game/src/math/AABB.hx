@@ -62,4 +62,9 @@ class AABB {
 	public function randomY() {
 		return y + Math.random() * h;
 	}
+
+	@:native("mrx")
+	public function mirrorX(m:Float) {
+		x = m + m - x - w;
+	}
 }

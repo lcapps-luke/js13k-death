@@ -52,6 +52,8 @@ class ResourceBuilder {
 	private static function buildLevel(path) {
 		var json:TiledMap = cast Json.parse(File.getContent(path));
 
+		var canMirror = getCanMirror(json.properties);
+
 		var walls = new Array<TiledObject>();
 		var players = new Array<TiledObject>();
 		var enemies = new Array<TiledObject>();
@@ -81,6 +83,7 @@ class ResourceBuilder {
 		}
 
 		var level = new Array<Int>();
+		level.push(canMirror ? 1 : 0);
 		pushRects(level, walls);
 		pushPoints(level, players);
 		pushPoints(level, enemies);
@@ -89,6 +92,19 @@ class ResourceBuilder {
 		pushRects(level, triggers);
 
 		return level;
+	}
+
+	static function getCanMirror(props:Array<TiledProperty>) {
+		if (props != null) {
+			for (p in props) {
+				if (p.name == "canMirror") {
+					return p.value;
+				}
+			}
+		}
+
+		trace("Room doesn't specify 'canMirror' so will not get mirror variant");
+		return false;
 	}
 
 	private static function addAll(arr:Array<TiledObject>, src:Array<TiledObject>) {
@@ -127,6 +143,7 @@ class ResourceBuilder {
 
 typedef TiledMap = {
 	var layers:Array<TiledLayer>;
+	var properties:Array<TiledProperty>;
 }
 
 typedef TiledLayer = {
@@ -140,4 +157,10 @@ typedef TiledObject = {
 	var y:Float;
 	var width:Float;
 	var height:Float;
+}
+
+typedef TiledProperty = {
+	var name:String;
+	var type:String;
+	var value:Bool;
 }

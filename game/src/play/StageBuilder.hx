@@ -37,8 +37,12 @@ class StageBuilder {
 
 		var r = 0;
 		for (d in ResourceBuilder.buildLevelDefinitions()) {
-			ROOM.push(makeRoomTemplate(d, r));
+			ROOM.push(makeRoomTemplate(d, r, -1));
 			r++;
+			if (d[0] == 1) {
+				ROOM.push(makeRoomTemplate(d, r, 1));
+				r++;
+			}
 		}
 	}
 
@@ -51,14 +55,15 @@ class StageBuilder {
 	 * triggerCount: x, y, width, height
 	**/
 	@:native("mr")
-	private static function makeRoomTemplate(d:Array<Int>, idx:Int):RoomTemplate {
+	private static function makeRoomTemplate(d:Array<Int>, idx:Int, m:Int):RoomTemplate {
 		var it = d.iterator();
-		var wall = loadAABBs(it);
-		var player = loadVec2s(it);
-		var enemy = loadVec2s(it);
-		var door = loadDoors(it);
-		var gate = loadAABBs(it);
-		var trigger = loadAABBs(it);
+		it.next();
+		var wall = loadAABBs(it, m);
+		var player = loadVec2s(it, m);
+		var enemy = loadVec2s(it, m);
+		var door = loadDoors(it, m);
+		var gate = loadAABBs(it, m);
+		var trigger = loadAABBs(it, m);
 
 		if (door.length == 1) {
 			ROOM_END.push(idx);
@@ -99,32 +104,40 @@ class StageBuilder {
 	}
 
 	@:native("la")
-	private static function loadAABBs(arr:ArrayIterator<Int>):Array<AABB> {
+	private static function loadAABBs(arr:ArrayIterator<Int>, m:Int):Array<AABB> {
 		var qty = arr.next();
 
 		var res = new Array<AABB>();
 		for (i in 0...qty) {
-			res.push(new AABB(arr.next(), arr.next(), arr.next(), arr.next()));
+			var a = new AABB(arr.next(), arr.next(), arr.next(), arr.next());
+			if (m > 0) {
+				a.mirrorX(960);
+			}
+			res.push(a);
 		}
 
 		return res;
 	}
 
 	@:native("lv")
-	private static function loadVec2s(arr:ArrayIterator<Int>):Array<Vec2> {
+	private static function loadVec2s(arr:ArrayIterator<Int>, m:Int):Array<Vec2> {
 		var qty = arr.next();
 
 		var res = new Array<Vec2>();
 		for (i in 0...qty) {
-			res.push(new Vec2(arr.next(), arr.next()));
+			var a = new Vec2(arr.next(), arr.next());
+			if (m > 0) {
+				a.mirrorX(960);
+			}
+			res.push(a);
 		}
 
 		return res;
 	}
 
 	@:native("ld")
-	private static function loadDoors(arr:ArrayIterator<Int>):Array<DoorTemplate> {
-		return loadAABBs(arr).map(a -> {
+	private static function loadDoors(arr:ArrayIterator<Int>, m:Int):Array<DoorTemplate> {
+		return loadAABBs(arr, m).map(a -> {
 			var p = 0;
 
 			if (a.x > 1920) {

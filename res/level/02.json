@@ -260,6 +260,12 @@
  "nextlayerid":8,
  "nextobjectid":19,
  "orientation":"orthogonal",
+ "properties":[
+        {
+         "name":"canMirror",
+         "type":"bool",
+         "value":false
+        }],
  "renderorder":"right-down",
  "tiledversion":"1.4.2",
  "tileheight":8,
