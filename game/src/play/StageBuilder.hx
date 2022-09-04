@@ -67,7 +67,8 @@ class StageBuilder {
 		for (d in 0...door.length) {
 			var r = {
 				r: idx,
-				d: d
+				d: d,
+				q: 0
 			}
 
 			getDoorSet(door[d].p).push(r);
@@ -197,7 +198,14 @@ class StageBuilder {
 			set = set.filter(t -> !ROOM_END.contains(t.r));
 		}
 
-		var tgt = Rand.chooseItem(set);
+		var tgt = Rand.chooseItem(set, (d) -> {
+			if (d.q > 0) {
+				d.q--;
+				return true;
+			}
+			return false;
+		});
+		tgt.q++;
 		var tpl = ROOM[tgt.r];
 
 		var doors = new Array<Door>();
@@ -233,7 +241,7 @@ class StageBuilder {
 
 	@:native("mkr")
 	static function makeRoom(t:RoomTemplate, d:Array<Door>, s:Int):Room {
-		var a = t.t.length > 0 && Math.random() > 0.5;
+		var a = t.t.length > 0 && Math.random() > 0.75;
 
 		return {
 			walls: t.w,
@@ -295,6 +303,7 @@ typedef DoorTemplate = {
 typedef RoomTemplateDoor = {
 	var r:Int;
 	var d:Int;
+	var q:Int;
 }
 
 typedef Room = {
