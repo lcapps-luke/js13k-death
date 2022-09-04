@@ -43,7 +43,9 @@ class Player extends Mob {
 	}
 
 	override public function update(s:Float) {
+		super.update(s);
 		if (!alive) {
+			xSpeed = 0;
 			return;
 		}
 
@@ -79,8 +81,6 @@ class Player extends Mob {
 			ySpeed = 0;
 			wallGrabTimer -= s;
 		}
-
-		super.update(s);
 
 		if (Ctrl.shoot && canShoot && ammo > 0) {
 			canShoot = false;
