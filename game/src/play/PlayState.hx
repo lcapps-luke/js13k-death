@@ -119,7 +119,7 @@ class PlayState extends State {
 			Main.context.drawImage(Images.phoenix, resPoint.x, resPoint.y, resPoint.w, resPoint.h);
 			Main.context.globalAlpha = 1;
 
-			if (cc && player.alive && resPoint.check(player.aabb)) {
+			if (cc && player.isAlive() && resPoint.check(player.aabb)) {
 				stage.resRoom = stage.deathRoom;
 				stage.resPoint = stage.deathPoint;
 				stage.deathRoom = -1;
@@ -140,7 +140,7 @@ class PlayState extends State {
 
 		for (m in mobs) {
 			m.update(s);
-			if (!m.alive) {
+			if (!m.isAlive()) {
 				mobs.remove(m);
 			}
 		}
@@ -163,7 +163,7 @@ class PlayState extends State {
 			}
 		}
 
-		if (!player.alive) {
+		if (!player.isAlive()) {
 			deathTimer -= s;
 
 			if (deathTimer < 0) {
@@ -227,6 +227,7 @@ class PlayState extends State {
 
 		this.room.q += mobs.length;
 
+		player.recoverShield();
 		Main.setState(new PlayState(stage, stage.resRoom, stage.resPoint, player.getState()));
 	}
 
@@ -271,7 +272,12 @@ class PlayState extends State {
 		var qty = 0;
 		for (e in room.enemySpawns) {
 			if (Line.distance(player.x, player.y, e.x, e.y) > ENEMY_SPAWN_DISTANCE) {
-				var z = new Zombi(this, e.x, e.y - 1);
+				var h = Zombi.HEALTH_NORMAL;
+				if (Math.random() < (stage.n - 1) * 0.01) {
+					h = Zombi.HEALTH_HARD;
+				}
+
+				var z = new Zombi(this, e.x, e.y - 1, h);
 				mobs.push(z);
 				particleBurst(Particle.spawn, z.aabb, p);
 

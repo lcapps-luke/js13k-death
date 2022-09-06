@@ -19,7 +19,7 @@ abstract class Mob {
 	public var aabb(default, null):AABB = new AABB(0, 0, 20, BASE_HEIGHT);
 
 	@:native("a")
-	public var alive(default, null) = true;
+	private var health:Int = 10;
 
 	public var x(default, null):Float = 0;
 	public var y(default, null):Float = 0;
@@ -243,6 +243,10 @@ abstract class Mob {
 
 	public inline function isTouching(flag:Int) {
 		return touching & flag > 0;
+	}
+
+	public inline function isAlive() {
+		return health > 0;
 	}
 }
 

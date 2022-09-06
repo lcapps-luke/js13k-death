@@ -4,8 +4,12 @@ import js.lib.Math;
 import math.AABB;
 import math.Line;
 import resource.Images;
+import resource.Sprite;
 
 class Zombi extends Mob {
+	public static inline var HEALTH_NORMAL:Int = 8;
+	public static inline var HEALTH_HARD:Int = 90;
+
 	private static inline var ATTACK_TIMER:Float = 0.5;
 	private static inline var ATTACK_FROM:Float = ATTACK_TIMER * 0.15;
 	private static inline var SPLAT_RANGE:Float = 200;
@@ -24,16 +28,27 @@ class Zombi extends Mob {
 	@:native("navz")
 	private var navZone:AABB;
 
-	public function new(s:PlayState, x:Float, y:Float) {
+	private var aspr:Sprite;
+
+	public function new(s:PlayState, x:Float, y:Float, h:Int) {
 		super(s, x, y, Images.zombi, 0.8 + Math.random() * 0.2);
 		wsp = 100 + Math.random() * 100;
 		attackBox = new AABB(0, 0, 48 * scale, 16 * scale);
 		navZone = new AABB(0, 0, 20 * scale * 2, 128 * scale);
+
+		aspr = new Sprite(Images.zombi, 80, 0, 34, 43);
+		aspr.c.set(scale * 0.6, scale * 0.6);
+		aspr.o.set(18, 10);
+		health = h;
 	}
 
 	override function update(s:Float) {
-		if (!alive) {
+		if (health < 1) {
 			return;
+		}
+
+		if (health < 50 && health > HEALTH_NORMAL) {
+			health = HEALTH_NORMAL;
 		}
 
 		super.update(s);
@@ -106,6 +121,12 @@ class Zombi extends Mob {
 		bodySpr.p.set(aabb.x + aabb.w / 2, aabb.y);
 		bodySpr.draw();
 
+		if (health > HEALTH_NORMAL) {
+			aspr.c.x = facingDirection * Math.abs(aspr.c.x);
+			aspr.p.copy(armMath.ca.p);
+			aspr.draw();
+		}
+
 		renderLimb(frontFoot, legF, legMath, legIk);
 		renderLimb(frontHand, armF, armMath, armIk);
 	}
@@ -134,7 +155,13 @@ class Zombi extends Mob {
 	override public function hit(fx:Float, d:Float, x:Float, y:Float) {
 		Sound.zombiHit();
 		if (Math.abs(this.x - fx) < SPLAT_RANGE) {
-			alive = false;
+			health -= 10;
+		}
+		else {
+			health--;
+		}
+
+		if (health < 1) {
 			for (i in 0...50) {
 				var gx = aabb.randomX();
 				var gy = aabb.randomY();
@@ -147,7 +174,9 @@ class Zombi extends Mob {
 			xSpeed = d * 200;
 			ySpeed = -100;
 
-			state.particle.push(Particle.gore(state, x, y, d * 300, -200 + Math.random() * 200));
+			var ptcl = health > 400 ? Particle.shield(state, x, y, d * -300,
+				-100 + Math.random() * 200) : Particle.gore(state, x, y, d * 300, -200 + Math.random() * 200);
+			state.particle.push(ptcl);
 		}
 	}
 }

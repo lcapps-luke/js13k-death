@@ -26,15 +26,13 @@ class Player extends Mob {
 	@:native("it")
 	private var invincibilityTimer:Float = -1;
 
-	@:native("sh")
-	private var shield:Bool = true;
-
 	private var gun:Sprite;
 	@:native("rll")
 	private var reloadLine:Line = new Line();
 
 	public function new(state:PlayState, x:Float, y:Float) {
 		super(state, x, y, Images.player);
+		health = 2;
 		var sc = aabb.h / 231;
 
 		gun = new Sprite(Images.player, 80, 0, 64, 34);
@@ -44,7 +42,7 @@ class Player extends Mob {
 
 	override public function update(s:Float) {
 		super.update(s);
-		if (!alive) {
+		if (health < 1) {
 			xSpeed = 0;
 			return;
 		}
@@ -159,13 +157,13 @@ class Player extends Mob {
 			invincibilityTimer = 0.5;
 			Sound.playerHit();
 
-			if (shield) {
-				shield = false;
+			health--;
+
+			if (health > 0) {
 				state.particleBurst(Particle.shield, aabb, 50);
 			}
 			else {
 				// die
-				alive = false;
 				for (i in 0...50) {
 					state.particle.push(Particle.gore(state, aabb.randomX(), aabb.randomY(), d * 300, -200 + Math.random() * 200));
 				}
@@ -181,7 +179,7 @@ class Player extends Mob {
 	public function getState():PlayerState {
 		return {
 			a: ammo,
-			s: shield,
+			s: health,
 			ys: ySpeed,
 			xs: xSpeed,
 			t: reloadTimer
@@ -191,7 +189,7 @@ class Player extends Mob {
 	@:native("ss")
 	public function setState(s:PlayerState) {
 		this.ammo = s.a;
-		this.shield = s.s;
+		this.health = s.s;
 		this.ySpeed = s.ys;
 		this.xSpeed = s.xs;
 		this.reloadTimer = s.t;
@@ -206,7 +204,7 @@ class Player extends Mob {
 
 	@:native("rsh")
 	public function recoverShield() {
-		this.shield = true;
+		this.health++;
 	}
 }
 
@@ -214,6 +212,6 @@ typedef PlayerState = {
 	var a:Int; // ammo
 	var xs:Float;
 	var ys:Float;
-	var s:Bool; // shield
+	var s:Int; // health
 	var t:Float; // reload timer
 }

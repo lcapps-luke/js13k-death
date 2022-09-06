@@ -29,7 +29,7 @@ class PackMain {
 		build(scriptSrc, "index.html");
 		build(scriptMin, "index-m.html");
 		build(scriptRoll, "index-r.html");
-		minifyHtml("index-m.html");
+		minifyHtml("index-r.html");
 		pack();
 	}
 
@@ -52,7 +52,7 @@ class PackMain {
 
 	public static function minify() {
 		Sys.command("uglifyjs", ["-o", scriptMin, scriptSrc]);
-		// Sys.command("npx", ["roadroller", scriptSrc, "-o", scriptRoll]);
+		Sys.command("npx", ["roadroller", scriptSrc, "-o", scriptRoll]);
 	}
 
 	public static function build(scriptFile, outputFile) {

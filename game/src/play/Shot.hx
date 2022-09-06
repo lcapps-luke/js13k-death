@@ -43,7 +43,7 @@ class Shot {
 			// find mob collision candidates
 			var mobs:Array<Mob> = [];
 			for (m in state.mobs) {
-				if (m.alive && aabb.check(m.aabb)) {
+				if (m.isAlive() && aabb.check(m.aabb)) {
 					mobs.push(m);
 				}
 			}
