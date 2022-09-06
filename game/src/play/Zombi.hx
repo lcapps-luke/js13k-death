@@ -41,7 +41,7 @@ class Zombi extends Mob {
 		attackBox.x = facingDirection > 0 ? x : x - attackBox.w;
 		attackBox.y = aabb.y + aabb.h * 0.15;
 
-		if (onGround && attackTimer <= 0) {
+		if (onGround() && attackTimer <= 0) {
 			if (state.player.y - y > 64) {
 				// above player, move towards edge of floor that is closest to player x
 				xSpeed = towardsNearestPlatformEdge();
@@ -55,9 +55,9 @@ class Zombi extends Mob {
 
 			facingDirection = xSpeed > 0 ? 1 : -1;
 
-			if (touchingWall) {
+			if (isTouching(xSpeed > 0 ? Mob.TOUCH_RIGHT : Mob.TOUCH_LEFT)) {
 				ySpeed = -JUMP_SPEED;
-				onGround = false;
+				clearOnGround();
 			}
 		}
 
@@ -143,7 +143,7 @@ class Zombi extends Mob {
 			}
 		}
 		else {
-			onGround = false;
+			clearOnGround();
 			xSpeed = d * 200;
 			ySpeed = -100;
 

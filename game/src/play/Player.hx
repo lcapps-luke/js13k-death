@@ -63,21 +63,21 @@ class Player extends Mob {
 			xSpeed = -MOVE_SPEED;
 			facingDirection = -1;
 		}
-		if (Ctrl.jump && (onGround || (touchingWall && wallGrabTimer > 0))) {
+		if (Ctrl.jump && (onGround() || (touchingWall() && wallGrabTimer > 0))) {
 			ySpeed = -JUMP_SPEED;
 
-			if (!onGround) {
+			if (!onGround()) {
 				wallGrabTimer = 0;
 			}
 
-			onGround = false;
+			clearOnGround();
 		}
 
-		if (onGround && !touchingWall) {
+		if (onGround() && !touchingWall()) {
 			wallGrabTimer = 0.5;
 		}
 
-		if (!onGround && touchingWall && ySpeed > 0 && wallGrabTimer > 0) {
+		if (!onGround() && touchingWall() && ySpeed > 0 && wallGrabTimer > 0) {
 			ySpeed = 0;
 			wallGrabTimer -= s;
 		}
@@ -109,7 +109,7 @@ class Player extends Mob {
 			}
 		}
 
-		if (!onGround) {
+		if (!onGround()) {
 			reloadTimer = -1;
 		}
 
@@ -171,7 +171,7 @@ class Player extends Mob {
 				}
 			}
 
-			onGround = false;
+			clearOnGround();
 			xSpeed = x > this.x ? -200 : 200;
 			ySpeed = -100;
 		}

@@ -11,6 +11,11 @@ abstract class Mob {
 	public static inline var BASE_HEIGHT = 124;
 	private static inline var GRAVITY = 600;
 
+	public static inline var TOUCH_FLOOR = 1; // 0001
+	public static inline var TOUCH_CEILING = 2; // 0010
+	public static inline var TOUCH_LEFT = 4; // 0100
+	public static inline var TOUCH_RIGHT = 8; // 1000
+
 	public var aabb(default, null):AABB = new AABB(0, 0, 20, BASE_HEIGHT);
 
 	@:native("a")
@@ -27,10 +32,8 @@ abstract class Mob {
 	@:native("ys")
 	private var ySpeed:Float = 0;
 
-	@:native("og")
-	private var onGround = false;
-	@:native("tw")
-	private var touchingWall = false;
+	@:native("tc")
+	private var touching:Int = 0;
 
 	@:native("fd")
 	private var facingDirection:Int = 1;
@@ -133,13 +136,13 @@ abstract class Mob {
 
 	@:native("u")
 	public function update(s:Float) {
-		touchingWall = false;
+		touching &= TOUCH_FLOOR; // clear all touch except floor
 		ySpeed += gravity * s;
 
 		var m = new Vec2(xSpeed * s, ySpeed * s);
 
 		if (ySpeed > 20) {
-			onGround = false;
+			clearOnGround();
 		}
 		for (p in state.wall) {
 			checkCollision(p, m);
@@ -156,7 +159,7 @@ abstract class Mob {
 		aabb.y = y - aabb.h;
 
 		// calculate walk cycle
-		if (onGround && xSpeed != 0) {
+		if (onGround() && xSpeed != 0) {
 			walkCycle += (xSpeed * (0.035 / scale)) * s;
 			frontFoot.x = aabb.centerX() + Math.cos(walkCycle) * (30 * scale);
 			frontFoot.y = aabb.y + Math.min(aabb.h + Math.sin(walkCycle) * (11 * scale), aabb.h);
@@ -171,8 +174,8 @@ abstract class Mob {
 			frontFoot.set(aabb.centerX(), aabb.y + aabb.h);
 			backFoot.set(aabb.centerX(), aabb.y + aabb.h);
 
-			setFootGround(legF, onGround ? 1 : 0);
-			setFootGround(legB, onGround ? 1 : 0);
+			setFootGround(legF, onGround() ? 1 : 0);
+			setFootGround(legB, onGround() ? 1 : 0);
 		}
 		legMath.ca.p.set(aabb.centerX(), aabb.y + aabb.h * 0.52);
 		legIk.set(aabb.centerX() + (200 * scale * facingDirection), aabb.centerY());
@@ -182,7 +185,7 @@ abstract class Mob {
 	private function checkCollision(p:AABB, m:Vec2) {
 		if (p.check(aabb, 0, m.y)) {
 			if (ySpeed > 0) {
-				onGround = true;
+				touching |= TOUCH_FLOOR;
 				floor = p;
 			}
 
@@ -193,10 +196,10 @@ abstract class Mob {
 
 		if (p.check(aabb, m.x, 0)) {
 			m.x = aabb.moveContactX(p, m.x);
+			touching |= m.x > 0 ? TOUCH_RIGHT : TOUCH_LEFT;
 			if (m.x != 0) {
 				m.x = m.x > 0 ? m.x - 0.2 : m.x + 0.2;
 			}
-			touchingWall = true;
 		}
 	}
 
@@ -225,6 +228,22 @@ abstract class Mob {
 
 	@:native("h")
 	public function hit(fx:Float, d:Float, x:Float, y:Float):Void {}
+
+	public inline function onGround():Bool {
+		return isTouching(TOUCH_FLOOR);
+	}
+
+	public inline function clearOnGround() {
+		touching &= TOUCH_CEILING | TOUCH_LEFT | TOUCH_RIGHT;
+	}
+
+	public inline function touchingWall() {
+		return isTouching(TOUCH_LEFT | TOUCH_RIGHT);
+	}
+
+	public inline function isTouching(flag:Int) {
+		return touching & flag > 0;
+	}
 }
 
 typedef Limb = {
