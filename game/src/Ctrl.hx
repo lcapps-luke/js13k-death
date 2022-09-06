@@ -197,7 +197,7 @@ class Ctrl {
 	}
 
 	@:native("ck")
-	private static function checkKeys(kk:Array<String>) {
+	public static function checkKeys(kk:Array<String>) {
 		for (k in kk) {
 			if (keys.get(k)) {
 				return true;
@@ -207,7 +207,7 @@ class Ctrl {
 	}
 
 	@:native("cb")
-	private static function checkButtons(b:Array<Int>, a:Array<Int>, c:Float->Bool = null) {
+	public static function checkButtons(b:Array<Int>, a:Array<Int>, c:Float->Bool = null) {
 		if (gamepad != null) {
 			for (i in b) {
 				if (gamepad.buttons[i].pressed) {
