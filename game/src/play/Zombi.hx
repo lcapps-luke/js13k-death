@@ -153,7 +153,10 @@ class Zombi extends Mob {
 	}
 
 	override public function hit(fx:Float, d:Float, x:Float, y:Float) {
-		Sound.zombiHit();
+		if (!isAlive()) {
+			return;
+		}
+
 		if (Math.abs(this.x - fx) < SPLAT_RANGE) {
 			health -= 10;
 		}
@@ -168,13 +171,14 @@ class Zombi extends Mob {
 
 				state.particle.push(Particle.gore(state, gx, gy, d * 300, -200 + Math.random() * 200));
 			}
+			Sound.zombiHit();
 		}
 		else {
 			clearOnGround();
 			xSpeed = d * 200;
 			ySpeed = -100;
 
-			var ptcl = health > 400 ? Particle.shield(state, x, y, d * -300,
+			var ptcl = health > HEALTH_NORMAL ? Particle.shield(state, x, y, d * -300,
 				-100 + Math.random() * 200) : Particle.gore(state, x, y, d * 300, -200 + Math.random() * 200);
 			state.particle.push(ptcl);
 		}

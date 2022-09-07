@@ -273,7 +273,7 @@ class PlayState extends State {
 		for (e in room.enemySpawns) {
 			if (Line.distance(player.x, player.y, e.x, e.y) > ENEMY_SPAWN_DISTANCE) {
 				var h = Zombi.HEALTH_NORMAL;
-				if (Math.random() < (stage.n - 1) * 0.01) {
+				if (Math.random() < (stage.n - 1) * 0.05) {
 					h = Zombi.HEALTH_HARD;
 				}
 
