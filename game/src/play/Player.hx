@@ -86,6 +86,10 @@ class Player extends Mob {
 			Sound.shoot();
 			ammo--;
 			reloadTimer = 0;
+
+			for (i in 0...10) {
+				state.particle.push(Particle.spark(state, x + facingDirection * 45, y - aabb.h * 0.78, facingDirection));
+			}
 		}
 
 		if (!Ctrl.shoot) {

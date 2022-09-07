@@ -168,6 +168,17 @@
                  "width":480,
                  "x":576,
                  "y":-368
+                }, 
+                {
+                 "height":32,
+                 "id":129,
+                 "name":"Jump",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":216,
+                 "x":176,
+                 "y":568
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -363,7 +374,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":126,
+ "nextobjectid":130,
  "orientation":"orthogonal",
  "properties":[
         {

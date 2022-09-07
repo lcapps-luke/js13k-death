@@ -50,22 +50,27 @@ class Shot {
 
 			collisionLine.a.a.set(x, y);
 			for (i in 0...SHOT_QTY) {
-				var hit = new Vec2(direction > 0 ? x + aabb.w : x - aabb.w, aabb.y + (aabb.h / SHOT_QTY) * i);
+				var variance = -10 + Math.random() * 20;
+				var hit = new Vec2(direction > 0 ? x + aabb.w : x - aabb.w, aabb.y + (aabb.h / SHOT_QTY) * i + variance);
 				collisionLine.a.b.set(hit.x, hit.y);
 
 				// check ray collision with walls
-				var wallHit = getHitPointw(walls);
-				if (wallHit != null) {
-					hit.x = wallHit.x;
-					hit.y = wallHit.y;
+				var wallHit = getHitPoint(walls, a -> a);
+				if (wallHit.h != null) {
+					hit.x = wallHit.h.x;
+					hit.y = wallHit.h.y;
 				}
 
 				// check ray collision with mobs
-				var mobHit = getHitPointm(mobs);
+				var mobHit = getHitPoint(mobs, m -> m.aabb);
 				if (mobHit.h != null && mobHit.h.distanceTo(x, y) < hit.distanceTo(x, y)) {
 					hit.x = mobHit.h.x;
 					hit.y = mobHit.h.y;
-					mobHit.m.hit(x, direction, hit.x, hit.y);
+					mobHit.o.hit(x, direction, hit.x, hit.y);
+				}
+				else {
+					state.particle.push(Particle.spark(state, hit.x, hit.y, -direction));
+					state.particle.push(Particle.dust(state, hit.x, hit.y));
 				}
 
 				Main.context.beginPath();
@@ -76,32 +81,16 @@ class Shot {
 		}
 	}
 
-	@:native("ghpw")
-	function getHitPointw(walls:Array<AABB>) {
+	@:native("ghp")
+	function getHitPoint<T>(walls:Array<T>, af:T->AABB) {
 		var hit:Vec2 = null;
+		var obj:T = null;
 		for (w in walls) {
-			eachLine(w, () -> {
+			eachLine(af(w), () -> {
 				if (collisionLine.update()) {
 					if (hit == null || hit.distanceTo(x, y) > collisionLine.i.distanceTo(x, y)) {
 						hit = collisionLine.i.clone();
-					}
-				}
-			});
-		}
-
-		return hit;
-	}
-
-	@:native("ghpm")
-	function getHitPointm(mobs:Array<Mob>) {
-		var hit:Vec2 = null;
-		var mob:Mob = null;
-		for (m in mobs) {
-			eachLine(m.aabb, () -> {
-				if (collisionLine.update()) {
-					if (hit == null || hit.distanceTo(x, y) > collisionLine.i.distanceTo(x, y)) {
-						hit = collisionLine.i.clone();
-						mob = m;
+						obj = w;
 					}
 				}
 			});
@@ -109,7 +98,7 @@ class Shot {
 
 		return {
 			h: hit,
-			m: mob
+			o: obj
 		};
 	}
 

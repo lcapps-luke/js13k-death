@@ -121,7 +121,7 @@ class Zombi extends Mob {
 		bodySpr.p.set(aabb.x + aabb.w / 2, aabb.y);
 		bodySpr.draw();
 
-		if (health > HEALTH_NORMAL) {
+		if (health > 50) {
 			aspr.c.x = facingDirection * Math.abs(aspr.c.x);
 			aspr.p.copy(armMath.ca.p);
 			aspr.draw();
@@ -178,8 +178,7 @@ class Zombi extends Mob {
 			xSpeed = d * 200;
 			ySpeed = -100;
 
-			var ptcl = health > HEALTH_NORMAL ? Particle.shield(state, x, y, d * -300,
-				-100 + Math.random() * 200) : Particle.gore(state, x, y, d * 300, -200 + Math.random() * 200);
+			var ptcl = health > HEALTH_NORMAL ? Particle.spark(state, x, y, -d) : Particle.gore(state, x, y, d * 300, -200 + Math.random() * 200);
 			state.particle.push(ptcl);
 		}
 	}

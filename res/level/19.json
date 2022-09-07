@@ -16,29 +16,7 @@
          "name":"wall",
          "objects":[
                 {
-                 "height":72,
-                 "id":80,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":1992,
-                 "x":-72,
-                 "y":0
-                }, 
-                {
-                 "height":624,
-                 "id":81,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":888,
-                 "x":1104,
-                 "y":72
-                }, 
-                {
-                 "height":896,
+                 "height":656,
                  "id":104,
                  "name":"",
                  "rotation":0,
@@ -46,7 +24,7 @@
                  "visible":true,
                  "width":872,
                  "x":-72,
-                 "y":248
+                 "y":488
                 }, 
                 {
                  "height":272,
@@ -69,6 +47,94 @@
                  "width":24,
                  "x":904,
                  "y":1032
+                }, 
+                {
+                 "height":1088,
+                 "id":130,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":272,
+                 "x":1720,
+                 "y":-392
+                }, 
+                {
+                 "height":16,
+                 "id":131,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":840,
+                 "x":504,
+                 "y":112
+                }, 
+                {
+                 "height":16,
+                 "id":138,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":144,
+                 "x":1576,
+                 "y":624
+                }, 
+                {
+                 "height":568,
+                 "id":140,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":240,
+                 "x":1104,
+                 "y":128
+                }, 
+                {
+                 "height":16,
+                 "id":141,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":144,
+                 "x":1344,
+                 "y":368
+                }, 
+                {
+                 "height":16,
+                 "id":142,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":144,
+                 "x":1576,
+                 "y":128
+                }, 
+                {
+                 "height":704,
+                 "id":143,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":240,
+                 "x":-88,
+                 "y":-392
+                }, 
+                {
+                 "height":168,
+                 "id":144,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":192,
+                 "x":608,
+                 "y":320
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -82,17 +148,6 @@
          "name":"ref",
          "objects":[
                 {
-                 "height":128,
-                 "id":4,
-                 "name":"Player",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":40,
-                 "x":1624,
-                 "y":744
-                }, 
-                {
                  "height":392,
                  "id":42,
                  "name":"Wall Jump",
@@ -100,8 +155,8 @@
                  "type":"",
                  "visible":true,
                  "width":232,
-                 "x":592,
-                 "y":-464
+                 "x":152,
+                 "y":96
                 }, 
                 {
                  "height":200,
@@ -111,8 +166,30 @@
                  "type":"",
                  "visible":true,
                  "width":480,
-                 "x":1120,
-                 "y":672
+                 "x":800,
+                 "y":-184
+                }, 
+                {
+                 "height":32,
+                 "id":133,
+                 "name":"drop",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":144,
+                 "x":528,
+                 "y":-168
+                }, 
+                {
+                 "height":128,
+                 "id":134,
+                 "name":"Player",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":40,
+                 "x":528,
+                 "y":360
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -171,8 +248,20 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":736,
-                 "y":248
+                 "x":704,
+                 "y":320
+                }, 
+                {
+                 "height":0,
+                 "id":145,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1104,
+                 "y":112
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -195,7 +284,7 @@
                  "visible":true,
                  "width":56,
                  "x":-72,
-                 "y":72
+                 "y":312
                 }, 
                 {
                  "height":176,
@@ -226,7 +315,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":130,
+ "nextobjectid":146,
  "orientation":"orthogonal",
  "properties":[
         {
