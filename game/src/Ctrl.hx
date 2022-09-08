@@ -33,6 +33,8 @@ class Ctrl {
 	public static var left(default, null):Bool = false;
 	@:native("r")
 	public static var right(default, null):Bool = false;
+	@:native("jh")
+	public static var jumpHeld(default, null):Bool = false;
 	@:native("j")
 	public static var jump(default, null):Bool = false;
 	@:native("s")
@@ -189,11 +191,14 @@ class Ctrl {
 
 	@:native("u")
 	public static function update() {
+		var jhb = jumpHeld;
 		left = checkKeys(["ArrowLeft", "KeyA"]) || checkButtons([14], [0, 2], f -> f < -0.3) || checkOnScreenButton(ON_SCREEN_LEFT);
 		right = checkKeys(["ArrowRight", "KeyD"]) || checkButtons([15], [0, 2], f -> f > 0.3) || checkOnScreenButton(ON_SCREEN_RIGHT);
-		jump = checkKeys(["ArrowUp", "KeyW"]) || checkButtons([12, 0], []) || checkOnScreenButton(ON_SCREEN_JUMP);
+		jumpHeld = checkKeys(["ArrowUp", "KeyW"]) || checkButtons([12, 0], []) || checkOnScreenButton(ON_SCREEN_JUMP);
 		shoot = checkKeys(["KeyX", "KeyJ"]) || checkButtons([1, 5, 4, 6, 7], []) || checkOnScreenButton(ON_SCREEN_SHOOT);
 		reload = checkKeys(["KeyZ", "KeyK", "KeyR"]) || checkButtons([2, 3], []) || checkOnScreenButton(ON_SCREEN_RELOAD);
+
+		jump = !jhb && jumpHeld;
 	}
 
 	@:native("ck")

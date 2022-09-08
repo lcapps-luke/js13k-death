@@ -30,6 +30,9 @@ class Player extends Mob {
 	@:native("rll")
 	private var reloadLine:Line = new Line();
 
+	@:native("wjd")
+	private var wallJumpDirection:Float = 0;
+
 	public function new(state:PlayState, x:Float, y:Float) {
 		super(state, x, y, Images.player);
 		health = 2;
@@ -51,21 +54,36 @@ class Player extends Mob {
 			invincibilityTimer -= s;
 		}
 		else {
-			xSpeed = 0;
+			xSpeed -= xSpeed * 10 * s;
 		}
-		if (Ctrl.right) {
-			xSpeed = MOVE_SPEED;
+		if ((Ctrl.right && wallJumpDirection > -0.01) || wallJumpDirection > 0) {
+			xSpeed = xSpeed < MOVE_SPEED ? xSpeed + MOVE_SPEED * 10 * s : MOVE_SPEED;
 			facingDirection = 1;
 		}
-		if (Ctrl.left) {
-			xSpeed = -MOVE_SPEED;
+
+		if ((Ctrl.left && wallJumpDirection < 0.01) || wallJumpDirection < 0) {
+			xSpeed = xSpeed > -MOVE_SPEED ? xSpeed - MOVE_SPEED * 10 * s : -MOVE_SPEED;
 			facingDirection = -1;
 		}
+
+		if ((!Ctrl.right && wallJumpDirection < 0) || (!Ctrl.left && wallJumpDirection > 0)) {
+			wallJumpDirection = 0;
+		}
+
+		if (Math.abs(wallJumpDirection) > 0.01) {
+			wallJumpDirection += wallJumpDirection > 0 ? -4 * s : 4 * s;
+		}
+		else {
+			wallJumpDirection = 0;
+		}
+
 		if (Ctrl.jump && (onGround() || (touchingWall() && wallGrabTimer > 0))) {
 			ySpeed = -JUMP_SPEED;
 
 			if (!onGround()) {
 				wallGrabTimer = 0;
+				// xSpeed += isTouching(Mob.TOUCH_LEFT) ? JUMP_SPEED : -JUMP_SPEED;
+				wallJumpDirection = isTouching(Mob.TOUCH_LEFT) ? 1 : -1;
 			}
 
 			clearOnGround();

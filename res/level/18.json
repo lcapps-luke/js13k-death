@@ -16,18 +16,7 @@
          "name":"wall",
          "objects":[
                 {
-                 "height":72,
-                 "id":80,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":1920,
-                 "x":0,
-                 "y":0
-                }, 
-                {
-                 "height":624,
+                 "height":1048,
                  "id":81,
                  "name":"",
                  "rotation":0,
@@ -35,10 +24,10 @@
                  "visible":true,
                  "width":120,
                  "x":1872,
-                 "y":72
+                 "y":-352
                 }, 
                 {
-                 "height":624,
+                 "height":1048,
                  "id":104,
                  "name":"",
                  "rotation":0,
@@ -46,7 +35,7 @@
                  "visible":true,
                  "width":128,
                  "x":-72,
-                 "y":72
+                 "y":-352
                 }, 
                 {
                  "height":272,
@@ -77,8 +66,8 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":664,
-                 "x":632,
+                 "width":760,
+                 "x":584,
                  "y":328
                 }, 
                 {
@@ -90,7 +79,7 @@
                  "visible":true,
                  "width":120,
                  "x":1752,
-                 "y":504
+                 "y":520
                 }, 
                 {
                  "height":64,
@@ -101,7 +90,7 @@
                  "visible":true,
                  "width":120,
                  "x":56,
-                 "y":504
+                 "y":520
                 }, 
                 {
                  "height":64,
@@ -112,7 +101,7 @@
                  "visible":true,
                  "width":296,
                  "x":56,
-                 "y":240
+                 "y":216
                 }, 
                 {
                  "height":64,
@@ -123,7 +112,7 @@
                  "visible":true,
                  "width":296,
                  "x":1576,
-                 "y":240
+                 "y":216
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -144,8 +133,8 @@
                  "type":"",
                  "visible":true,
                  "width":40,
-                 "x":1616,
-                 "y":112
+                 "x":744,
+                 "y":200
                 }, 
                 {
                  "height":392,
@@ -155,8 +144,8 @@
                  "type":"",
                  "visible":true,
                  "width":232,
-                 "x":1176,
-                 "y":-424
+                 "x":192,
+                 "y":-448
                 }, 
                 {
                  "height":200,
@@ -166,8 +155,8 @@
                  "type":"",
                  "visible":true,
                  "width":480,
-                 "x":576,
-                 "y":-368
+                 "x":608,
+                 "y":-296
                 }, 
                 {
                  "height":32,
@@ -271,7 +260,7 @@
                  "visible":true,
                  "width":0,
                  "x":104,
-                 "y":240
+                 "y":216
                 }, 
                 {
                  "height":0,
@@ -283,7 +272,7 @@
                  "visible":true,
                  "width":0,
                  "x":104,
-                 "y":504
+                 "y":520
                 }, 
                 {
                  "height":0,
@@ -295,7 +284,7 @@
                  "visible":true,
                  "width":0,
                  "x":1824,
-                 "y":240
+                 "y":216
                 }, 
                 {
                  "height":0,
@@ -306,8 +295,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":1824,
-                 "y":504
+                 "x":1816,
+                 "y":520
                 }, 
                 {
                  "height":0,

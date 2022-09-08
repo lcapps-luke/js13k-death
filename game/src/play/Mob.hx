@@ -144,13 +144,13 @@ abstract class Mob {
 		if (ySpeed > 20) {
 			clearOnGround();
 		}
-		for (p in state.wall) {
-			checkCollision(p, m);
-		}
 		for (p in state.mobs) {
 			if (p != this) {
 				checkCollision(p.aabb, m);
 			}
+		}
+		for (p in state.wall) {
+			checkCollision(p, m);
 		}
 
 		x += m.x;
@@ -159,7 +159,7 @@ abstract class Mob {
 		aabb.y = y - aabb.h;
 
 		// calculate walk cycle
-		if (onGround() && xSpeed != 0) {
+		if (onGround() && Math.abs(xSpeed) > 5) {
 			walkCycle += (xSpeed * (0.035 / scale)) * s;
 			frontFoot.x = aabb.centerX() + Math.cos(walkCycle) * (30 * scale);
 			frontFoot.y = aabb.y + Math.min(aabb.h + Math.sin(walkCycle) * (11 * scale), aabb.h);
