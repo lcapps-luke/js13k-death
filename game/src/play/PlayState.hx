@@ -58,6 +58,9 @@ class PlayState extends State {
 	@:native("rmp")
 	private var roomMidPoint:Float = 0;
 
+	@:native("scs")
+	public var screenShake:Float = 0;
+
 	public function new(stg:Stage, rid:Int, p:Vec2, ps:PlayerState = null) {
 		super();
 		this.stage = stg;
@@ -99,6 +102,14 @@ class PlayState extends State {
 
 	override function update(s:Float) {
 		super.update(s);
+
+		Main.context.save();
+
+		if (screenShake > 0) {
+			screenShake -= s;
+			var d = 10 * screenShake;
+			Main.context.translate(-d + Math.random() * (d * 2), -d + Math.random() * (d * 2));
+		}
 
 		Main.context.fillStyle = "#918299";
 		Main.context.fillRect(0, 0, 1920, roomMidPoint);
@@ -211,6 +222,8 @@ class PlayState extends State {
 				}
 			}
 		}
+
+		Main.context.restore();
 
 		Tutorial.update(this);
 		drawHud();

@@ -108,6 +108,8 @@ class Player extends Mob {
 			for (i in 0...10) {
 				state.particle.push(Particle.spark(state, x + facingDirection * 45, y - aabb.h * 0.78, facingDirection));
 			}
+
+			state.screenShake = 0.2;
 		}
 
 		if (!Ctrl.shoot) {
@@ -183,6 +185,7 @@ class Player extends Mob {
 
 			if (health > 0) {
 				state.particleBurst(Particle.shield, aabb, 50);
+				state.screenShake = 0.2;
 			}
 			else {
 				// die
