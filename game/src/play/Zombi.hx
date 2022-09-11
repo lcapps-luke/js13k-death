@@ -91,6 +91,8 @@ class Zombi extends Mob {
 				if (state.player.aabb.check(attackBox)) {
 					state.player.hit(x, facingDirection, x, y);
 				}
+
+				Sound.zombiAttack();
 			}
 
 			// attack anim
@@ -129,6 +131,10 @@ class Zombi extends Mob {
 
 		renderLimb(frontFoot, legF, legMath, legIk);
 		renderLimb(frontHand, armF, armMath, armIk);
+
+		if (y > 1500) {
+			health = 0;
+		}
 	}
 
 	private inline function towardsNearestPlatformEdge():Float {

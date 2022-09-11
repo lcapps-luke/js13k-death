@@ -16,18 +16,7 @@
          "name":"wall",
          "objects":[
                 {
-                 "height":72,
-                 "id":80,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":1920,
-                 "x":0,
-                 "y":0
-                }, 
-                {
-                 "height":600,
+                 "height":1064,
                  "id":81,
                  "name":"",
                  "rotation":0,
@@ -35,7 +24,7 @@
                  "visible":true,
                  "width":120,
                  "x":1872,
-                 "y":72
+                 "y":-392
                 }, 
                 {
                  "height":40,
@@ -82,7 +71,7 @@
                  "y":248
                 }, 
                 {
-                 "height":608,
+                 "height":1072,
                  "id":118,
                  "name":"",
                  "rotation":0,
@@ -90,7 +79,7 @@
                  "visible":true,
                  "width":112,
                  "x":-72,
-                 "y":72
+                 "y":-392
                 }, 
                 {
                  "height":40,
@@ -133,8 +122,8 @@
                  "type":"",
                  "visible":true,
                  "width":232,
-                 "x":1648,
-                 "y":144
+                 "x":40,
+                 "y":-392
                 }, 
                 {
                  "height":200,

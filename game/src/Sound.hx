@@ -3,12 +3,12 @@ package;
 class Sound {
 	@:native("s")
 	public static function shoot() {
-		ZzFX.zzfx(1.38, .05, 70, .02, .06, .07, 4, .35, -1.6, 0, 0, 0, 0, 1.3, -2.8, .3, .08, .94, .07, .13);
+		ZzFX.zzfx(1.4, .05, 70, .02, .06, .07, 4, .35, -1.6, 0, 0, 0, 0, 1.3, -2.8, .3, .08, .94, .07, .13);
 	}
 
 	@:native("r")
 	public static function reload() {
-		ZzFX.zzfx(2.02, .5, 160, 0, .02, 0, 2, .7, 20, 0, -50, 0, 0, 0, 0, 0, .01, .2, .02, .11);
+		ZzFX.zzfx(2, .5, 160, 0, .02, 0, 2, .7, 20, 0, -50, 0, 0, 0, 0, 0, .01, .2, .02, .11);
 	}
 
 	@:native("z")
@@ -34,5 +34,10 @@ class Sound {
 	@:native("d")
 	public static function recoverSpawn() {
 		ZzFX.zzfx(2, .05, 461, 0, 0, .2, 0, .7, 0, 3, 481, .05, 0, 0, 0, 0, .02, .5, 0, 0);
+	}
+
+	@:native("a")
+	public static function zombiAttack() {
+		ZzFX.zzfx(1, .05, 763, .1, .02, .06, 4, 0, -4.3, 0, -140, 0, .04, 0, 0, .1, .08, .28, .2, 0);
 	}
 }
